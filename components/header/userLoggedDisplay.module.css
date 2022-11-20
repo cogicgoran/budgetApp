@@ -1,0 +1,59 @@
+.display-user-logged {
+  position: absolute;
+  top: 40px;
+  right: 16px;
+  padding: 0.2rem;
+  z-index: 3;
+  cursor: default;
+}
+
+.display-user-logged > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  color: #1a4e5b;
+}
+
+.display-user-icon {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.display-user-arrow {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.display-user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  border: 1px solid #90c3d0;
+  padding: 0.2rem 0.1rem;
+  border-radius: 0.2rem;
+  width: 130px;
+  background-color: white;
+  color: #1a4e5b;
+  font-size: 0.8rem;
+  display: block;
+}
+
+.display-user-dropdown > * {
+  padding: 0 0.2rem;
+  cursor: pointer;
+}
+
+.display-user-dropdown > *:hover {
+  background-color: #e0f9ff;
+}
+
+.dropdown-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  cursor: default;
+}
