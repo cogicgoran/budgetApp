@@ -1,0 +1,26 @@
+.dashboardLatestCategory {
+  border: 1px solid brown;
+  width: 80px;
+  max-width: 120px;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.dashboardLatestCategoryImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem;
+  font-size: 1.4rem;
+  color: brown;
+}
+
+.dashboardLatestCategoryName {
+  text-align: center;
+  background-color: brown;
+  color: white;
+  font-weight: 300;
+  font-size: 0.5rem;
+  padding: 0.1rem;
+  text-transform: uppercase;
+}

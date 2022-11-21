@@ -2,8 +2,8 @@ import React, { MouseEvent, useState } from "react";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { useTranslation } from "react-i18next";
 import { firebaseAuthService } from "../../config/firebase/service";
-import { ChevronDown } from "../icons/ChevronDown";
-import { CircleUser } from "../icons/CircleUser";
+import { IconChevronDown } from "../icons/ChevronDown";
+import { IconCircleUser } from "../icons/CircleUser";
 import styles from "./userLoggedDisplay.module.scss";
 
 const UserOptionDropdown: React.FC = () => {
@@ -35,8 +35,8 @@ const UserOptionDropdown: React.FC = () => {
     >
       <div className={styles.displayUserLogged}>
         <div className={styles.userDropdownLabel} onClick={handleDropdownClick}>
-          <CircleUser key="userIcon" />
-          <ChevronDown key="arrowDown" />
+          <IconCircleUser key="userIcon" />
+          <IconChevronDown key="arrowDown" />
         </div>
         {showDropdown && (
           <div className={styles.displayUserDropdown}>

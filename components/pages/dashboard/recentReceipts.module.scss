@@ -1,0 +1,54 @@
+.dashboardRecent {
+  min-height: 300px;
+  padding: 0.4em;
+  background-color: white;
+}
+
+.dashboardRecent h2 {
+  padding: 0 1em;
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-size: 1em;
+  font-weight: 400;
+  color: #0a1f24;
+  text-transform: uppercase;
+}
+
+.dashboardRecentControls {
+  margin-top: 2em;
+  text-align: center;
+  font-size: 0.6em;
+  color: white;
+}
+
+.dashboardRecentControls button {
+  cursor: pointer;
+  padding: 0.4em 2em;
+  margin: 0 1em;
+  border-radius: 1em;
+  text-transform: uppercase;
+}
+
+.dashboardRecentControls > *:nth-child(1) button {
+  background-color: #1a4e5b;
+  border: 1px solid #314354;
+}
+
+.dashboardRecentControls > *:nth-child(2) button {
+  background-color: #60a917;
+  border: 1px solid #2d7600;
+}
+
+.dashboardNoRecentResults {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 2em auto;
+  width: 200px;
+}
+
+.dashboardNoRecentResultsIcon {
+  font-size: 100px;
+  color: #647687;
+}
