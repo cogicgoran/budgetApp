@@ -1,10 +1,17 @@
-import React, { useState } from "react";
-import styles from "./auth.module.css";
+import React from "react";
+import styles from "./auth.module.scss";
 import IconFacebook from "../icons/IconFacebook";
 import IconGoogle from "../icons/IconGoogle";
 import { useTranslation } from "react-i18next";
-
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
+import {
+  useSignInWithEmailAndPassword,
+  useSignInWithFacebook,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
+import { firebaseAuthService } from "../../config/firebase/service";
+import { Field, Form, Formik } from "formik";
+import { validationSignInSchema } from "../../utils/validation/auth.schema";
+import classnames from "classnames";
 
 interface Props {
   onToggleForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,8 +19,10 @@ interface Props {
 
 const SignIn: React.FC<Props> = ({ onToggleForm }: Props) => {
   const { t } = useTranslation();
-  // const { currentUser } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const [signInWithFacebook] = useSignInWithFacebook(firebaseAuthService);
+  const [signInWithGoogle] = useSignInWithGoogle(firebaseAuthService);
+  const [signInWithEmailAndPassword, user, isLoading, error] =
+    useSignInWithEmailAndPassword(firebaseAuthService);
 
   const textEmail = t("email");
   const textPassword = t("password");
@@ -23,61 +32,44 @@ const SignIn: React.FC<Props> = ({ onToggleForm }: Props) => {
   const textDontHaveAnAccount = t("dontHaveAnAccount");
   const textSignUpHere = t("signUpHere");
 
-  // async function handleSignIn(values) {
-  //   if (currentUser) {
-  //     return alert("You must logout first!");
-  //   }
-  //   setIsLoading(true);
-  //   try {
-  //     await signIn(values.email, values.password);
-  //   } catch (error) {
-  //     alert("error signing up");
-  //   }
-  // }
+  async function handleSignIn(values: any) {
+    try {
+      await signInWithEmailAndPassword(values.email, values.password);
+    } catch (error) {
+      alert("error signing up");
+    }
+  }
 
   async function handleSignInWithGoogle() {
     try {
-      await signInWithPopup(
-        getAuth(),
-        new GoogleAuthProvider()
-      );
+      signInWithGoogle();
     } catch (error) {
       console.log(error);
-      
       alert("error logging with google account");
     }
   }
 
   async function handleSignInWithFacebook() {
     try {
-      await signInWithPopup(
-        getAuth(),
-        new FacebookAuthProvider()
-      );
+      await signInWithFacebook();
     } catch (error) {
       alert("error logging with facebook account");
     }
   }
 
-  const inputClass = styles["form__input-wrapper"];
-  const inputErrorClass = [
-    styles["form__input-wrapper"],
-    styles["invalid"],
-  ].join(" ");
-
   return (
-    <div className={styles["form-container"]}>
-      {/* <Formik
+    <div className={styles.formContainer}>
+      <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSignInSchema}
         onSubmit={handleSignIn}
       >
         {({ touched, errors }) => (
-          <Form className={styles["sign-in-form"]}>
+          <Form className={styles.signInForm}>
             <div
-              className={
-                touched.email && errors.email ? inputErrorClass : inputClass
-              }
+              className={classnames(styles.formInputWrapper, {
+                [styles.invalid]: touched.email && errors.email,
+              })}
             >
               <Field
                 id="sign-in-email"
@@ -86,11 +78,9 @@ const SignIn: React.FC<Props> = ({ onToggleForm }: Props) => {
               />
             </div>
             <div
-              className={
-                touched.password && errors.password
-                  ? inputErrorClass
-                  : inputClass
-              }
+              className={classnames(styles.formInputWrapper, {
+                [styles.invalid]: touched.password && errors.password,
+              })}
             >
               <Field
                 type="password"
@@ -99,25 +89,25 @@ const SignIn: React.FC<Props> = ({ onToggleForm }: Props) => {
                 placeholder={`${textPassword}...`}
               />
             </div>
-            <div className={styles["form__controls"]}>
+            <div className={styles.formControls}>
               <button disabled={isLoading} type="submit">
                 {textSignIn}
               </button>
             </div>
           </Form>
         )}
-      </Formik> */}
+      </Formik>
       <div>{textOr}</div>
-      <div className={styles["login-via-service-wrapper"]}>
+      <div className={styles.loginServiceWrapper}>
         <button
-          className={styles["login-via-service-btn"]}
+          className={styles.loginServiceBtn}
           onClick={handleSignInWithGoogle}
         >
           <IconGoogle />
           <span>{textSignInWith} Google</span>
         </button>
         <button
-          className={styles["login-via-service-btn"]}
+          className={styles.loginServiceBtn}
           onClick={handleSignInWithFacebook}
         >
           <IconFacebook />
@@ -136,7 +126,6 @@ const SignIn: React.FC<Props> = ({ onToggleForm }: Props) => {
       </div>
     </div>
   );
-  
 };
 
 export default SignIn;

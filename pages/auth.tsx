@@ -1,39 +1,25 @@
-import {
-  browserLocalPersistence,
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  signInWithRedirect,
-} from "firebase/auth";
 import type { NextPage } from "next";
-import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import SignIn from "../components/auth/SignIn";
+import SignUp from "../components/auth/SignUp";
 import { firebaseAuthService } from "../config/firebase/service";
-import { Persistence } from "firebase/auth";
 
 const AuthPage: NextPage = () => {
+  const [user] = useAuthState(firebaseAuthService);
+  const [showSignIn, setShowSignIn] = useState(true);
+  const router = useRouter();
+
+  if (user) {
+    router.push('/dashboard');
+    return null;
+  }
+
   return (
     <>
-      <Head>
-        <title>Authentication</title>
-        <meta name="description" content="Budget app authentication page" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div>Auth page</div>
-      <div
-        onClick={async () => {
-          await firebaseAuthService.setPersistence(browserLocalPersistence);
-          signInWithRedirect(firebaseAuthService, new GoogleAuthProvider());
-        }}
-      >
-        SIGN IN WITH GOOGLE
-      </div>
-      <div
-        onClick={async () => {
-          await firebaseAuthService.setPersistence(browserLocalPersistence);
-          signInWithRedirect(firebaseAuthService, new FacebookAuthProvider());
-        }}
-      >
-        SIGN IN WITH FACEBOOK
-      </div>
+      {showSignIn && <SignIn onToggleForm={setShowSignIn} />}
+      {!showSignIn && <SignUp onToggleForm={setShowSignIn} />}
     </>
   );
 };

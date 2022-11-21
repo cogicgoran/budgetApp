@@ -1,23 +1,27 @@
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
+import { useSignOut } from "react-firebase-hooks/auth";
 import { useTranslation } from "react-i18next";
-import styles from "./userLoggedDisplay.module.css";
-import { getAuth } from "firebase/auth";
+import { firebaseAuthService } from "../../config/firebase/service";
+import { ChevronDown } from "../icons/ChevronDown";
+import { CircleUser } from "../icons/CircleUser";
+import styles from "./userLoggedDisplay.module.scss";
 
 const UserOptionDropdown: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { t } = useTranslation();
+  const [signOut, loading, error] = useSignOut(firebaseAuthService);
 
   const textLogout = t("logout");
 
   async function handleLogout() {
     try {
-      await getAuth(getFirebaseClient()).signOut();
+      await signOut();
     } catch (error) {
-      alert("error while logging out");
+      alert("Sign out error occurred");
     }
   }
 
-  function handleDropdownClick(event: any) {
+  function handleDropdownClick(event: MouseEvent<HTMLDivElement>) {
     event.preventDefault();
     event.stopPropagation();
     setShowDropdown((prevState) => !prevState);
@@ -29,26 +33,20 @@ const UserOptionDropdown: React.FC = () => {
         event.preventDefault();
       }}
     >
-      <div className={styles["display-user-logged"]}>
-        <div onClick={handleDropdownClick}>
-          {/* <FontAwesomeIcon
-            className={styles["display-user-icon"]}
-            icon={solid("circle-user")}
-          /> */}
-          {/* <FontAwesomeIcon
-            className={styles["display-user-arrow"]}
-            icon={solid("chevron-down")}
-          /> */}
+      <div className={styles.displayUserLogged}>
+        <div className={styles.userDropdownLabel} onClick={handleDropdownClick}>
+          <CircleUser key="userIcon" />
+          <ChevronDown key="arrowDown" />
         </div>
         {showDropdown && (
-          <div className={styles["display-user-dropdown"]}>
+          <div className={styles.displayUserDropdown}>
             <div onClick={handleLogout}>{textLogout}</div>
           </div>
         )}
       </div>
       {showDropdown && (
         <div
-          className={styles["dropdown-bg"]}
+          className={styles.dropdownBackground}
           onClick={handleDropdownClick}
         ></div>
       )}

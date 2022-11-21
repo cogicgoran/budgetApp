@@ -1,4 +1,4 @@
-.display-user-logged {
+.displayUserLogged {
   position: absolute;
   top: 40px;
   right: 16px;
@@ -7,25 +7,24 @@
   cursor: default;
 }
 
-.display-user-logged > div:first-child {
+.userDropdownLabel {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 0.2rem;
   color: #1a4e5b;
-}
-
-.display-user-icon {
-  font-size: 30px;
   cursor: pointer;
+
+  svg:nth-child(1) {
+    width: 32px;
+  }
+
+  svg:nth-child(2) {
+    width: 12px;
+  }
 }
 
-.display-user-arrow {
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.display-user-dropdown {
+.displayUserDropdown {
   position: absolute;
   top: 100%;
   right: 0;
@@ -39,16 +38,18 @@
   display: block;
 }
 
-.display-user-dropdown > * {
-  padding: 0 0.2rem;
-  cursor: pointer;
+.displayUserDropdown {
+  > * {
+    padding: 0 0.2rem;
+    cursor: pointer;
+  }
+
+  > *:hover {
+    background-color: #e0f9ff;
+  }
 }
 
-.display-user-dropdown > *:hover {
-  background-color: #e0f9ff;
-}
-
-.dropdown-bg {
+.dropdownBackground {
   position: fixed;
   top: 0;
   left: 0;
