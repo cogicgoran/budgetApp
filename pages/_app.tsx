@@ -35,7 +35,7 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
         <meta name="description" content="Budget App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ToastContainer position="bottom-right" autoClose={300} />
+      <ToastContainer position="bottom-right" autoClose={1000} />
       <AppLayout>
         <Language />
         <Header />

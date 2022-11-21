@@ -23,20 +23,22 @@
 
 .dashboardRecentControls button {
   cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
   padding: 0.4em 2em;
   margin: 0 1em;
   border-radius: 1em;
   text-transform: uppercase;
 }
 
-.dashboardRecentControls > *:nth-child(1) button {
+.dashboardRecentControls button:nth-child(1) {
   background-color: #1a4e5b;
-  border: 1px solid #314354;
+  border-color: #314354;
 }
 
-.dashboardRecentControls > *:nth-child(2) button {
+.dashboardRecentControls button:nth-child(2) {
   background-color: #60a917;
-  border: 1px solid #2d7600;
+  border-color: #2d7600;
 }
 
 .dashboardNoRecentResults {

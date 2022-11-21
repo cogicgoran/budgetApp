@@ -57,10 +57,10 @@ function RecentReceipts() {
         {!isLoading && error && <div>{error.message}</div>}
         {!isLoading && !error && dataResponse}
         <div className={styles.dashboardRecentControls}>
-          <Link href={PATHS.VIEW_RECEIPTS}>
+          <Link key="seeMore" href={PATHS.VIEW_RECEIPTS}>
             <button type="button">{textSeeMore}</button>
           </Link>
-          <Link href={PATHS.NEW_RECEIPTS}>
+          <Link key="addReceipt" href={PATHS.NEW_RECEIPTS}>
             <button type="button">{textAddNew}</button>
           </Link>
         </div>

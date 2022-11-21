@@ -1,0 +1,37 @@
+.receiptWrapper {
+  text-align: left;
+  font-size: 0.8em;
+
+  div {
+    display: grid;
+    grid-template-columns: 12ch 24ch;
+    column-gap: 2ch;
+    align-items: center;
+    font-size: 16px;
+  }
+
+  label,
+  input,
+  select,
+  option {
+    color: #1a4e5b;
+    text-overflow: ellipsis;
+    font-size: 14px;
+  }
+
+  input,
+  select,
+  option {
+    cursor: pointer;
+    padding: 2px 3px;
+    background-color: white;
+  }
+
+  input[type="datetime-local"] {
+    padding: 0 6px;
+  }
+}
+
+.receiptInfoItem {
+  margin-bottom: 0.2em;
+}
