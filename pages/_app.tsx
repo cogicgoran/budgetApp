@@ -1,12 +1,15 @@
 import type { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import styles from "../styles/app.module.scss";
-import "../styles/globals.css";
-import "../styles/fonts.css";
+import "../styles/globals.scss";
+import "../styles/fonts.scss";
 import Header from "../components/header/Header";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuthService } from "../config/firebase/service";
+import AppLayout from "../components/UI/layout/AppLayout";
+import Language from "../components/language/Language";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
@@ -32,21 +35,12 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
         <meta name="description" content="Budget App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.appContainer}>
-        <div className={styles.appLanguage}>
-          <select
-            name="language"
-            id=""
-            // defaultValue={prefLanguage} TODO: implement
-            // onChange={languageChangeHandler} TODO: implement
-          >
-            <option value="en">ENG</option>
-            <option value="fr">FRA</option>
-          </select>
-        </div>
+      <ToastContainer position="bottom-right" autoClose={300} />
+      <AppLayout>
+        <Language />
         <Header />
         <Component {...pageProps} />
-      </div>
+      </AppLayout>
     </>
   );
 };

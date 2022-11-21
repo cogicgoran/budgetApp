@@ -30,14 +30,6 @@
 }
 
 .formInputWrapper {
-  margin: 0 auto;
-  width: max-content;
-  display: grid;
-  align-items: center;
-  grid-template-columns: 14ch 26ch;
-  column-gap: 2ch;
-  margin-bottom: 0.2em;
-
   input {
     margin: 4px 0;
     padding: 0.1em 0.2em;
@@ -62,19 +54,11 @@
   }
 }
 
-.formControls {
-  margin-top: 3em;
-  display: flex;
-  justify-content: center;
-  gap: 4em;
-  font-size: 10px;
-
-  button {
-    padding: 0.3em 1em;
-    min-width: 16ch;
-    border-radius: 1em;
-    cursor: pointer;
-  }
+.formControls button {
+  padding: 0.3em 1em;
+  min-width: 16ch;
+  border-radius: 1em;
+  cursor: pointer;
 }
 
 .loginServiceWrapper {
