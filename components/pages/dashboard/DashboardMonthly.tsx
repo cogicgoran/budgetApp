@@ -1,44 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import styles from "./dashboardMonthly.module.scss";
 import { Trans } from "react-i18next";
-import { useHttp } from "../../../hooks/useHttp";
-import { handleIncomingArticles } from "../../../utils/function/common";
 import CategoryReceipt from "./CategoryReceipt";
+import { useMonthlyRepost } from "../../../hooks/useMonthlyReport";
 
 function DashboardMonthly() {
-  const [receipts, setReceipts] = useState(null);
-  const { isLoading, error, fetchTask } = useHttp();
-
-  const receiptsRequestConfig = {
-    url: "http://localhost:8000/api/receipts/current-month",
-    method: "GET",
-  };
-
-  useEffect(() => {
-    fetchTask(receiptsRequestConfig, handleReceiptsResponse);
-  }, []);
-
-  var [categories, total] = useMemo(() => {
-    return receipts ? handleIncomingArticles(receipts) : [null, null];
-  }, [receipts]);
+  const { categories, total, isLoading } = useMonthlyRepost();
+  const categoriesExist = categories && categories.length > 0;
 
   const textCurrentMonth = (
     <Trans components={{ br: <br /> }}>currentMonth</Trans>
   );
-
-  var display;
-
-  if (categories && categories.length > 0) {
-    display = categories.map((category: any) => {
-      return <CategoryReceipt key={category.category_name} {...category} />;
-    });
-  } else {
-    display = "No cats";
-  }
-
-  function handleReceiptsResponse(response: any) {
-    setReceipts(response.data);
-  }
 
   return (
     <div className={styles.dashboardCurrentMonth}>
@@ -46,7 +18,7 @@ function DashboardMonthly() {
         <span>{textCurrentMonth}</span>
       </div>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && !error && (
+      {!isLoading && (
         <>
           <div className={styles.dashboardCurrentMonthTotal}>
             <span>
@@ -54,11 +26,19 @@ function DashboardMonthly() {
             </span>
           </div>
           <div className={styles.dashboardCurrentMonthCategories}>
-            {display}
+            {categoriesExist
+              ? categories.map((category: any) => {
+                  return (
+                    <CategoryReceipt
+                      key={category.category_name}
+                      {...category}
+                    />
+                  );
+                })
+              : "No categories"}
           </div>
         </>
       )}
-      {!isLoading && error && <div>{error.message}</div>}
     </div>
   );
 }
