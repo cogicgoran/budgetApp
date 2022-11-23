@@ -2,10 +2,10 @@ import React from "react";
 import styles from "./dashboardMonthly.module.scss";
 import { Trans } from "react-i18next";
 import CategoryReceipt from "./CategoryReceipt";
-import { useMonthlyRepost } from "../../../hooks/useMonthlyReport";
+import { useMonthlyReport } from "../../../hooks/useMonthlyReport";
 
 function DashboardMonthly() {
-  const { categories, total, isLoading } = useMonthlyRepost();
+  const { categories, total, isLoading } = useMonthlyReport();
   const categoriesExist = categories && categories.length > 0;
 
   const textCurrentMonth = (

@@ -1,28 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useHttp } from "../../../hooks/useHttp";
+import React, { useMemo } from "react";
+import { useMarketplaces } from "../../../hooks/useMarketplaces";
 import MarketplaceItem from "./MarketplaceItem";
 import styles from "./marketplaceList.module.scss";
 
 interface Props {
-    onNoMarketplaces: any;
+  onNoMarketplaces: any;
 }
 
 function MarketplaceList(props: Props) {
-  const [marketplaces, setMarketplaces] = useState<any>(null);
-  const { isLoading, error, fetchTask } = useHttp();
-
-  const marketplaceRequestConfig = {
-    url: "http://localhost:8000/api/marketplaces",
-    method: "GET",
-  };
-
-  useEffect(() => {
-    fetchTask(marketplaceRequestConfig, handleMarketplaceResponse);
-  }, []);
-
-  function handleMarketplaceResponse(response: any) {
-    setMarketplaces(response.data);
-  }
+  const { marketplaces, isLoading } = useMarketplaces();
 
   const display = useMemo(() => {
     return marketplaces && marketplaces.length > 0 ? (
@@ -52,8 +38,7 @@ function MarketplaceList(props: Props) {
   return (
     <div>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && error && <div>{error.message}</div>}
-      {!isLoading && !error && display}
+      {!isLoading && display}
     </div>
   );
 }

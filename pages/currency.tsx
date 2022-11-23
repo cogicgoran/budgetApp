@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { useHttp } from "../hooks/useHttp";
 import { useRouter } from "next/router";
-import { PATHS } from "../utils/constants";
 import PageTitle from "../components/pageTitle/PageTitle";
 import MainCard from "../components/pages/currency/MainCard";
+import { useCurrencies } from "../hooks/useCurrencies";
+import { toast } from "react-toastify";
+import { createCurrency } from "../utils/function/api.ts/dashboard";
 
 const validationSchema = Yup.object().shape({
   currency: Yup.string()
@@ -14,46 +15,22 @@ const validationSchema = Yup.object().shape({
     .required("Required!"),
 });
 
-const getCurrencyRequestConfig = {
-  url: "http://localhost:8000/api/currencies",
-  method: "GET",
-};
-
 function CurrencyPage() {
-  const {
-    isLoading: currencyIsLoading,
-    error: currencyError,
-    fetchTask: getCurrencies,
-  } = useHttp();
-  const {
-    isLoading: currencyPostIsLoading,
-    error: currencyPostError,
-    fetchTask: postCurrencies,
-  } = useHttp();
-  const [isPostingCurrency, setIsPostingCurrency] = useState(false);
-  const [currencies, setCurrencies] = useState<any>(null);
+  const { currencies, isLoading } = useCurrencies();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    getCurrencies(getCurrencyRequestConfig, handleGetCurrenciesResponse);
-  }, []);
-
-  function handlePostCurrencyResponse() {
-    router.push(PATHS.HOME);
-  }
-
-  function handleSubmit(values: any) {
-    const postCurrencyRequestConfig = {
-      url: "http://localhost:8000/api/currencies",
-      method: "POST",
-      data: { currency: values.currency },
-    };
-    setIsPostingCurrency(true);
-    postCurrencies(postCurrencyRequestConfig, handlePostCurrencyResponse);
-  }
-
-  function handleGetCurrenciesResponse(response: any) {
-    setCurrencies(response.data);
+  async function handleSubmit(values: any) {
+    setIsSubmitting(true);
+    try {
+      createCurrency({ currency: values.currency });
+      router.push(router.asPath);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create new currency");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -61,29 +38,19 @@ function CurrencyPage() {
       <PageTitle title="Currencies" />
       <MainCard>
         <div>
-          {currencyIsLoading && <div>Fetching currencies...</div>}
-          {!currencyIsLoading && currencyError && (
-            <div>{currencyError.message}</div>
-          )}
-          {!currencyIsLoading &&
-            !currencyError &&
+          {isLoading && <div>Fetching currencies...</div>}
+          {!isLoading &&
             currencies &&
             currencies.length > 0 &&
             currencies.map((currency: any) => {
               return <div>{currency.code}</div>;
             })}
-          {!currencyIsLoading &&
-            !currencyError &&
-            currencies &&
-            currencies.length === 0 && <div>No currencies found!</div>}
+          {!isLoading && currencies && currencies.length === 0 && (
+            <div>No currencies found!</div>
+          )}
         </div>
-        {isPostingCurrency && currencyPostIsLoading && <div>Loading...</div>}
-        {isPostingCurrency && !currencyPostIsLoading && currencyPostError && (
-          <div>{currencyPostError.message}</div>
-        )}
-        {isPostingCurrency && !currencyPostIsLoading && !currencyPostError && (
-          <div>Successfully added currency</div>
-        )}
+        {isSubmitting && <div>Loading...</div>}
+
         <Formik
           initialValues={{ currency: "" }}
           validationSchema={validationSchema}
