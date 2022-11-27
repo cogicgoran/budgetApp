@@ -12,7 +12,6 @@ import ReceiptInfo from "../components/pages/new-receipt/ReceiptInfo";
 import ReceiptProductList from "../components/pages/new-receipt/ReceiptProductList";
 import ReceiptAddProduct from "../components/pages/new-receipt/ReceiptAddProduct";
 import Backdrop from "../components/UI/backdrop/Backdrop";
-import { createReceipt } from "../utils/function/api.ts/dashboard";
 import ReceiptForm from "../components/forms/ReceiptForm";
 
 export function isReceiptInfoValid(info: any) {

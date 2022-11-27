@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getMarketplaces } from "../utils/function/api.ts/dashboard";
 import { toast } from "react-toastify";
+import { IMarketplace } from "../types/marketplace";
+import { getMarketplaces } from "../utils/function/api/marketplace";
 
 export function useMarketplaces() {
-  const [marketplaces, setMarketplaces] = useState<any[]>([]);
+  const [marketplaces, setMarketplaces] = useState<IMarketplace[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

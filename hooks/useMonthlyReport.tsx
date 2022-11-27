@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { getMonthlyReport } from "../utils/function/api.ts/dashboard";
 import { toast } from "react-toastify";
+import { getMonthlyReport } from "../utils/function/api/receipt";
 import { handleIncomingArticles } from "../utils/function/common";
 
 export function useMonthlyReport() {

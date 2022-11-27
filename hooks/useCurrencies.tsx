@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { getCurrencies } from "../utils/function/api.ts/dashboard";
+import { getCurrencies } from "../utils/function/api/currency";
 
 export function useCurrencies() {
   const [currencies, setCurrencies] = useState<any[]>([]);

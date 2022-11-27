@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getRecentReceipts } from "../utils/function/api.ts/dashboard";
 import { toast } from "react-toastify";
+import { getRecentReceipts } from "../utils/function/api/receipt";
 import { handleIncomingArticles } from "../utils/function/common";
 
 export function useRecentReceipts() {
@@ -14,7 +14,7 @@ export function useRecentReceipts() {
   async function getReceipts() {
     setIsLoading(true);
     try {
-      const receiptsData = (await getRecentReceipts()) as any;
+      const receiptsData = (await getRecentReceipts());
       const receipts = handleIncomingArticles(receiptsData);
       setReceipts(receipts);
     } catch (error) {
