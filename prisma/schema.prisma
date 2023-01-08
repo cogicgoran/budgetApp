@@ -2,53 +2,55 @@
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
-    provider        = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
-// model Post {
-//     id        String  @id @default(cuid())
-//     title     String
-//     content   String?
-//     published Boolean @default(false)
-//     author    User?   @relation(fields: [authorId], references: [id])
-//     authorId  String?
-// }
-
-// model User {
-//     id        String   @id @default(cuid())
-//     name      String?
-//     email     String?  @unique
-//     createdAt DateTime @default(now()) @map(name: "created_at")
-//     updatedAt DateTime @updatedAt @map(name: "updated_at")
-//     posts     Post[]
-
-//     @@map(name: "users")
-// }
 model Category {
-    id    Int    @id @default(autoincrement())
-    name  String @db.VarChar(30)
-    icon  String @db.VarChar(30)
-    color String @db.Char(7)
+    id       Int       @id @default(autoincrement())
+    name     String    @db.VarChar(30)
+    icon     String    @db.VarChar(30)
+    color    String    @db.Char(7)
+    articles Article[]
 }
 
 model Currency {
-    id   Int    @id @default(autoincrement())
-    code String @unique @db.Char(3)
+    id       Int       @id @default(autoincrement())
+    code     String    @unique @db.Char(3)
+    receipts Receipt[]
+    articles Article[]
 }
 
 model Marketplace {
-    id      Int    @id @default(autoincrement())
-    name    String
-    address String @unique
+    id       Int       @id @default(autoincrement())
+    name     String
+    address  String    @unique
+    receipts Receipt[]
 }
 
-// model Receipt {
-//     id          Int      @id @default(autoincrement())
-//     date        DateTime 
-//     price       Float @db. 
-//     currency
-//     marketplace
-// }
+model Receipt {
+    id            Int         @id @default(autoincrement())
+    date          DateTime
+    price         Float       @db.DoublePrecision
+    currencyId    Int
+    marketplaceId Int
+    currency      Currency    @relation(fields: [currencyId], references: [id])
+    marketplace   Marketplace @relation(fields: [marketplaceId], references: [id])
+    articles      Article[]
+}
+
+model Article {
+    id         Int      @id @default(autoincrement())
+    name       String   @db.VarChar(64)
+    unitPrice  Float    @db.DoublePrecision
+    amount     Float    @db.DoublePrecision
+    categoryId Int
+    receiptId  Int
+    currencyId Int
+    currency   Currency @relation(fields: [currencyId], references: [id])
+    category   Category @relation(fields: [categoryId], references: [id])
+    receipt    Receipt  @relation(fields: [receiptId], references: [id])
+}
