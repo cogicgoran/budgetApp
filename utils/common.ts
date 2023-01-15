@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { IconApple } from "../components/icons/Apple";
 import { IconBaby } from "../components/icons/Baby";
 import { IconBabyCarriage } from "../components/icons/BabyCarriage";
@@ -207,5 +208,12 @@ export const categoryIcons = [
   IconCart,
   IconTV,
 ];
+
+export function getIconByName(iconName: string | number): ()=> ReactNode | null
+ {
+  const icon = categoryStyleSheet[iconName].icon;
+  if(!icon) return () => null
+  return icon;
+}
 
 export default categoryStyleSheet;

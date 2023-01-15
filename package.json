@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "migrations": "prisma db push",
-    "seed":"prisma db seed",
+    "seed": "prisma db seed",
     "studio": "prisma studio"
   },
   "prisma": {
@@ -32,6 +32,7 @@
     "react-redux": "8.0.4",
     "react-toastify": "9.1.1",
     "sass": "1.56.1",
+    "swiper": "8.4.5",
     "yup": "0.32.11"
   },
   "devDependencies": {
