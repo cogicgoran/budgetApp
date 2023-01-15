@@ -212,7 +212,7 @@ export const categoryIcons = [
 export function getIconByName(
   iconName: string | number
 ): () => ReactNode | null {
-  const icon = categoryStyleSheet[iconName].icon;
+  const icon = categoryIcons[iconName as any];
   if (!icon) return () => null;
   return icon;
 }

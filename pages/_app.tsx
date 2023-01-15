@@ -3,6 +3,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/globals.scss";
 import "../styles/fonts.scss";
+import "../styles/swiper.scss";
 import Header from "../components/header/Header";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebaseAuthService } from "../config/firebase/service";

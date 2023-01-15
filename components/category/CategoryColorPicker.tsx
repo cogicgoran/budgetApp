@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { NavigationOptions } from "swiper/types/modules/navigation";
 import { CSSSelector } from "swiper/types/shared";
@@ -59,23 +58,6 @@ function CategoryColorPicker({ onCancel }: Props) {
     updateColors(newColorScheme);
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      let centerElement = swiperRef.current?.querySelector(
-        `.${styles.colorPickerActiveSlide}`
-      );
-      if (centerElement) return;
-      const nextElement =
-        swiperRef.current?.querySelector(".swiper-slide-next");
-
-      if (!nextElement) {
-        return;
-      }
-      centerElement = nextElement.previousElementSibling!;
-      centerElement?.classList.add(styles.colorPickerActiveSlide);
-    }, 0);
-  }, [colorScheme.color]);
-
   function handleTransitionStart(swiper: SwiperClass) {
     if (isFirstRenderRef.current) return;
     const newColorScheme = { ...categoryColors[swiper.realIndex] };
@@ -83,22 +65,20 @@ function CategoryColorPicker({ onCancel }: Props) {
   }
 
   return (
-    <div className={styles.categoryColorSelect}>
+    <div className={classNames(styles.categoryColorSelect, 'colorPicker')}>
       <h3 className={styles.addCategoryTitle}>{textAddCategory}</h3>
       <CategoryShowcase />
 
       <div style={{ position: "relative" }}>
         <Swiper
-          modules={[Navigation]}
           ref={swiperRef as any}
           slidesPerView={9}
           grabCursor
           centeredSlides
           loop={true}
           onInit={onInit}
-          onSlideChangeTransitionEnd={handleTransitionStart} // hack for fixing active class not being added to centered item
+          onSlideChangeTransitionStart={handleTransitionStart}
           loopedSlides={categoryColors.length}
-          slideActiveClass={styles.colorPickerActiveSlide}
           className={styles.swiperColorWraper}
           watchSlidesProgress
           onProgress={handleProgress}
