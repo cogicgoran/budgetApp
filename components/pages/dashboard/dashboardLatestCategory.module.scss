@@ -1,26 +1,34 @@
 .dashboardLatestCategory {
   border: 1px solid brown;
   width: 80px;
-  max-width: 120px;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
 
 .dashboardLatestCategoryImage {
+  height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.6rem;
   font-size: 1.4rem;
   color: brown;
+
+  svg {
+    max-height: 48px;
+    max-width: 48px;
+  }
 }
 
 .dashboardLatestCategoryName {
+  padding: 2px;
   text-align: center;
   background-color: brown;
   color: white;
+  overflow: hidden;
   font-weight: 300;
   font-size: 0.5rem;
-  padding: 0.1rem;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
 }

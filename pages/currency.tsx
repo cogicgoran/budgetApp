@@ -7,6 +7,7 @@ import MainCard from "../components/pages/currency/MainCard";
 import { useCurrencies } from "../hooks/useCurrencies";
 import { toast } from "react-toastify";
 import { createCurrency } from "../utils/function/api/currency";
+import { Currency } from "../types/currency";
 
 const validationSchema = Yup.object().shape({
   currency: Yup.string()
@@ -41,8 +42,8 @@ function CurrencyPage() {
           {isLoading && <div>Fetching currencies...</div>}
           {!isLoading &&
             currencies.length > 0 &&
-            currencies.map((currency: any) => {
-              return <div>{currency.code}</div>;
+            currencies.map((currency: Currency) => {
+              return <div key={currency.id}>{currency.code}</div>;
             })}
           {!isLoading && currencies && currencies.length === 0 && (
             <div>No currencies found!</div>
