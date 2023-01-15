@@ -124,16 +124,6 @@
   visibility: visible;
 }
 
-.categoryColorSelect .categoryShowcase {
-  cursor: pointer;
-}
-
-.categoryColorSelect {
-  margin-bottom: 40px;
-  padding: 1rem;
-  background-color: #f5fdff;
-}
-
 .color-slider {
   width: 188px;
   margin: 0 auto;
@@ -209,4 +199,56 @@
 
 .sliderColorNext {
   right: 104px;
+}
+
+.swiperIconWrapper {
+  text-align: center;
+  margin: auto;
+  width: 384px;
+  height: 128px;
+}
+
+.iconPickerSlide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 200ms;
+
+  svg {
+    fill: currentColor;
+    height: 20px;
+  }
+}
+
+.categoryShowcaseTransparent {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 2px;
+  border-style: solid;
+  width: 100px;
+  margin: 12px auto;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.sliderIconArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(calc(-50% + 2px));
+  cursor: pointer;
+
+  svg {
+    cursor: pointer;
+    height: 24px;
+  }
+}
+
+.sliderIconPrev {
+  left: 0;
+}
+
+.sliderIconNext {
+  right: 0;
 }

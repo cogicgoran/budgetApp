@@ -14,7 +14,7 @@ interface Props {
 export type ColorScheme = typeof categoryColors[number];
 
 const DEFAULT_COLOR_SCHEME = categoryColors[0];
-const DEFAULT_ICON_INDEX = 20;
+const DEFAULT_ICON_INDEX = 0;
 
 interface ICategoryPickerContext {
   colorScheme: ColorScheme;
