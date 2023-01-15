@@ -65,7 +65,7 @@ function CategoryColorPicker({ onCancel }: Props) {
   }
 
   return (
-    <div className={classNames(styles.categoryColorSelect, 'colorPicker')}>
+    <div className={classNames(styles.categoryColorSelect, "colorPicker")}>
       <h3 className={styles.addCategoryTitle}>{textAddCategory}</h3>
       <CategoryShowcase />
 

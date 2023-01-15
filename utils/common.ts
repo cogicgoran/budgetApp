@@ -209,10 +209,8 @@ export const categoryIcons = [
   IconTV,
 ];
 
-export function getIconByName(
-  iconName: string | number
-): () => ReactNode | null {
-  const icon = categoryIcons[iconName as any];
+export function getIconByName(iconName: number): () => ReactNode | null {
+  const icon = categoryIcons[iconName];
   if (!icon) return () => null;
   return icon;
 }

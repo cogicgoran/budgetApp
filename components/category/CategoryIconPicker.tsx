@@ -15,7 +15,7 @@ interface Props {
 }
 
 function CategoryIconPicker({ onCancel }: Props) {
-  const {setIconIndex, colorScheme} = useCategoryPickerContext();
+  const { setIconIndex, colorScheme } = useCategoryPickerContext();
   const swiperRef = useRef<HTMLDivElement | null>(null);
   const swiperInstanceRef = useRef<SwiperClass | null>(null);
   const prevRef = useRef(null);
@@ -51,7 +51,7 @@ function CategoryIconPicker({ onCancel }: Props) {
   }
 
   return (
-    <div className={classNames(styles.categoryColorSelect, 'iconPicker')}>
+    <div className={classNames(styles.categoryColorSelect, "iconPicker")}>
       <div style={{ position: "relative" }}>
         <Swiper
           ref={swiperRef as any}
@@ -70,7 +70,7 @@ function CategoryIconPicker({ onCancel }: Props) {
             <SwiperSlide
               key={icon.toString()}
               className={styles.iconPickerSlide}
-              style={{color: colorScheme.color}}
+              style={{ color: colorScheme.color }}
             >
               {icon()}
             </SwiperSlide>
