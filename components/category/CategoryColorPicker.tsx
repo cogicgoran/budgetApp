@@ -69,7 +69,6 @@ function CategoryColorPicker({ onCancel }: Props) {
         swiperRef.current?.querySelector(".swiper-slide-next");
 
       if (!nextElement) {
-        console.log("no next");
         return;
       }
       centerElement = nextElement.previousElementSibling!;
@@ -117,7 +116,10 @@ function CategoryColorPicker({ onCancel }: Props) {
           ))}
         </Swiper>
         <div
-          className={classNames(styles.sliderColorPrev, styles.sliderColorArrow)}
+          className={classNames(
+            styles.sliderColorPrev,
+            styles.sliderColorArrow
+          )}
           ref={prevRef}
           onClick={() => {
             swiperInstanceRef.current!.slidePrev();
@@ -126,7 +128,10 @@ function CategoryColorPicker({ onCancel }: Props) {
           <PrevArrow />
         </div>
         <div
-          className={classNames(styles.sliderColorNext, styles.sliderColorArrow)}
+          className={classNames(
+            styles.sliderColorNext,
+            styles.sliderColorArrow
+          )}
           ref={nextRef}
           onClick={() => {
             swiperInstanceRef.current!.slideNext();

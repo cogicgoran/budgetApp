@@ -5,8 +5,13 @@ import { getIconByName } from "../../utils/common";
 import { useCategoryPickerContext } from "./AddCategory";
 
 function CategoryShowcase() {
-  const { colorScheme, iconIndex, categoryName, setCategoryName, setShowIconPicker } =
-    useCategoryPickerContext();
+  const {
+    colorScheme,
+    iconIndex,
+    categoryName,
+    setCategoryName,
+    setShowIconPicker,
+  } = useCategoryPickerContext();
   const { t } = useTranslation();
   const textTypeHere = t("typeHere");
 
@@ -16,7 +21,7 @@ function CategoryShowcase() {
     <div
       style={{ borderColor: colorScheme.borderColor }}
       className={styles.categoryShowcase}
-      onClick={() => setShowIconPicker(prevState => !prevState)}
+      onClick={() => setShowIconPicker((prevState) => !prevState)}
     >
       <div
         style={{ color: colorScheme.color }}
