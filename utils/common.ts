@@ -186,33 +186,39 @@ export const categoryColors = [
   { color: "#046582", borderColor: "#005562" },
 ];
 
-export const categoryIcons = [
-  IconApple,
-  IconBaby,
-  IconBabyCarriage,
-  IconBook,
-  IconCarrot,
-  IconCar,
-  IconCat,
-  IconCocktail,
-  IconFootball,
-  IconMask,
-  IconHeadphone,
-  IconHeart,
-  IconHouse,
-  IconIceCream,
-  IconLemon,
-  IconMedkit,
-  IconPaw,
-  IconHandegg,
-  IconCart,
-  IconTV,
+export const categoryIconsData = [
+  { name: "apple", icon: IconApple },
+  { name: "baby", icon: IconBaby },
+  { name: "babyCarriage", icon: IconBabyCarriage },
+  { name: "book", icon: IconBook },
+  { name: "carrot", icon: IconCarrot },
+  { name: "car", icon: IconCar },
+  { name: "cat", icon: IconCat },
+  { name: "cocktail", icon: IconCocktail },
+  { name: "football", icon: IconFootball },
+  { name: "mask", icon: IconMask },
+  { name: "headphone", icon: IconHeadphone },
+  { name: "heart", icon: IconHeart },
+  { name: "iceCreat", icon: IconIceCream },
+  { name: "lemon", icon: IconLemon },
+  { name: "medkit", icon: IconMedkit },
+  { name: "paw", icon: IconPaw },
+  { name: "handegg", icon: IconHandegg },
+  { name: "cart", icon: IconCart },
+  { name: "tv", icon: IconTV },
 ];
 
-export function getIconByName(iconName: number): () => ReactNode | null {
-  const icon = categoryIcons[iconName];
-  if (!icon) return () => null;
-  return icon;
+export function getIconByName(iconName: string) {
+  const iconData = categoryIconsData.find(
+    (iconData) => iconData.name === iconName
+  );
+  if (!iconData) return null;
+  return iconData;
 }
 
+export function getColorSchemeByMainColor(mainColor: string) {
+  return categoryColors.find((colorScheme) => colorScheme.color === mainColor);
+}
+
+export type ColorScheme = typeof categoryColors[number];
 export default categoryStyleSheet;

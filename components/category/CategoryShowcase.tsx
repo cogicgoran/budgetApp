@@ -1,21 +1,18 @@
 import React from "react";
 import styles from "./addCategory.module.scss";
 import { useTranslation } from "react-i18next";
-import { getIconByName } from "../../utils/common";
-import { useCategoryPickerContext } from "./AddCategory";
+import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
 
 function CategoryShowcase() {
   const {
     colorScheme,
-    iconIndex,
+    iconData,
     categoryName,
     setCategoryName,
     setShowIconPicker,
   } = useCategoryPickerContext();
   const { t } = useTranslation();
   const textTypeHere = t("typeHere");
-
-  const icon = getIconByName(iconIndex);
 
   return (
     <div
@@ -27,7 +24,7 @@ function CategoryShowcase() {
         style={{ color: colorScheme.color }}
         className={styles.categoryShowcaseImage}
       >
-        {icon()}
+        {iconData.icon()}
       </div>
       <div
         style={{

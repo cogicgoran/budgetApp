@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export function handleIncomingArticles(articles: any[]) {
   const receiptsObj: any = {};
 
@@ -59,4 +61,15 @@ export function handleIncomingArticles(articles: any[]) {
     );
   });
   return receipts;
+}
+
+export type APIErrorResponse = AxiosError<{
+  message: string;
+  error: string;
+}>;
+
+export function getResponseErrorMessage(error: unknown) {
+  const axiosErrorMessage = (error as APIErrorResponse).response?.data.message;
+  if (axiosErrorMessage) return axiosErrorMessage;
+  return (error as any).message;
 }

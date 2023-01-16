@@ -1,15 +1,10 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next';
-import { getIconByName } from '../../utils/common';
-import { useCategoryPickerContext } from './AddCategory';
+import React from "react";
+import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
 import styles from "./addCategory.module.scss";
 
 function TransparentCategoryShowcase() {
-  const {
-    colorScheme,
-    categoryName,
-    setShowIconPicker,
-  } = useCategoryPickerContext();
+  const { colorScheme, categoryName, setShowIconPicker } =
+    useCategoryPickerContext();
 
   return (
     <div
@@ -20,8 +15,7 @@ function TransparentCategoryShowcase() {
       <div
         style={{ color: colorScheme.color }}
         className={styles.categoryShowcaseImage}
-      >
-      </div>
+      ></div>
       <div
         style={{
           backgroundColor: colorScheme.color,
@@ -37,7 +31,7 @@ function TransparentCategoryShowcase() {
         {categoryName && <p className={styles.tooltipText}>{categoryName}</p>}
       </div>
     </div>
-  )
+  );
 }
 
-export default TransparentCategoryShowcase
+export default TransparentCategoryShowcase;

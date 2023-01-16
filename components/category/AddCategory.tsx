@@ -1,73 +1,68 @@
-import React, { createContext, useContext, useState } from "react";
-import categoryStyleSheet, {
-  categoryColors,
-  getIconByName,
-} from "../../utils/common";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import {
+  CategoryPickerContext,
+  ICategoryPickerContext,
+} from "../../context/CategoryPickerContext";
+import { categoryColors, categoryIconsData } from "../../utils/common";
+import { createCategory } from "../../utils/function/api/category";
+import { createCategoryPayload } from "../../utils/function/category";
+import { getResponseErrorMessage } from "../../utils/function/common";
 import styles from "./addCategory.module.scss";
 import CategoryColorPicker from "./CategoryColorPicker";
 import CategoryIconPicker from "./CategoryIconPicker";
 
 interface Props {
   onCancel: any;
+  onAddCategory: any;
 }
-
-export type ColorScheme = typeof categoryColors[number];
 
 const DEFAULT_COLOR_SCHEME = categoryColors[0];
-const DEFAULT_ICON_INDEX = 0;
+const DEFAULT_ICON_INDEX = categoryIconsData[0];
 
-interface ICategoryPickerContext {
-  colorScheme: ColorScheme;
-  setColorScheme: React.Dispatch<
-    React.SetStateAction<{
-      color: string;
-      borderColor: string;
-    }>
-  >;
-  iconIndex: number;
-  setIconIndex: React.Dispatch<React.SetStateAction<number>>;
-  categoryName: string;
-  setCategoryName: React.Dispatch<React.SetStateAction<string>>;
-  showIconPicker: boolean;
-  setShowIconPicker: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const CategoryPickerContext = createContext<ICategoryPickerContext | {}>({});
-
-function AddCategory({ onCancel }: Props) {
+function AddCategory({ onCancel, onAddCategory }: Props) {
   const [colorScheme, setColorScheme] = useState(DEFAULT_COLOR_SCHEME);
-  const [iconIndex, setIconIndex] = useState(DEFAULT_ICON_INDEX);
+  const [iconData, setIconData] = useState(DEFAULT_ICON_INDEX);
   const [categoryName, setCategoryName] = useState("");
   const [showIconPicker, setShowIconPicker] = useState(false);
 
   const contextValue: ICategoryPickerContext = {
     colorScheme,
     setColorScheme,
-    iconIndex,
-    setIconIndex,
+    iconData,
+    setIconData,
     categoryName,
     setCategoryName,
     showIconPicker,
     setShowIconPicker,
   };
 
+  async function addCategory() {
+    try {
+      if (!categoryName.trim()) return; // how to handle no input name?
+      const payload = createCategoryPayload({
+        color: colorScheme.color,
+        icon: iconData.name,
+        name: categoryName,
+      });
+      const result = await createCategory(payload);
+      onAddCategory(result);
+      toast.success("Category created");
+      onCancel();
+    } catch (error) {
+      toast.error(getResponseErrorMessage(error));
+      console.error(error);
+    }
+  }
+
   return (
     <div className={styles.addCategoryContainer}>
       <CategoryPickerContext.Provider value={contextValue}>
-        <CategoryColorPicker onCancel={onCancel} />
+        <CategoryColorPicker onCancel={onCancel} onSubmit={addCategory} />
         {showIconPicker && <CategoryIconPicker onCancel={onCancel} />}
       </CategoryPickerContext.Provider>
     </div>
   );
-}
-
-export function useCategoryPickerContext() {
-  const context = useContext(CategoryPickerContext);
-  if (context === undefined)
-    throw new Error(
-      "useContext must be used withing corresponding context provider"
-    );
-  return context as ICategoryPickerContext;
 }
 
 export default AddCategory;

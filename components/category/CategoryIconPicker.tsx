@@ -1,21 +1,20 @@
 import React, { useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
-import type SwiperClass from "swiper";
-
 import styles from "./addCategory.module.scss";
-import categoryStyleSheet, { categoryIcons } from "../../utils/common";
+import { categoryIconsData } from "../../utils/common";
 import classNames from "classnames";
 import TransparentCategoryShowcase from "./TransparentCategoryShowcase";
 import { NextArrow, PrevArrow } from "./CategoryColorPicker";
 import { flushSync } from "react-dom";
-import { useCategoryPickerContext } from "./AddCategory";
+import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
+import type SwiperClass from "swiper";
+
 interface Props {
   onCancel: any;
 }
 
 function CategoryIconPicker({ onCancel }: Props) {
-  const { setIconIndex, colorScheme } = useCategoryPickerContext();
+  const { setIconData, colorScheme } = useCategoryPickerContext();
   const swiperRef = useRef<HTMLDivElement | null>(null);
   const swiperInstanceRef = useRef<SwiperClass | null>(null);
   const prevRef = useRef(null);
@@ -28,7 +27,11 @@ function CategoryIconPicker({ onCancel }: Props) {
 
   function updateIcon(newIndex: number) {
     flushSync(() => {
-      setIconIndex(newIndex);
+      setIconData((prevState) => {
+        const newIconData = categoryIconsData[newIndex];
+        if (prevState.name === newIconData.name) return prevState;
+        return { ...newIconData };
+      });
     });
   }
 
@@ -61,18 +64,18 @@ function CategoryIconPicker({ onCancel }: Props) {
           loop={true}
           onInit={onInit}
           onSlideChangeTransitionStart={handleTransitionStart}
-          loopedSlides={categoryIcons.length}
+          loopedSlides={categoryIconsData.length}
           className={styles.swiperIconWrapper}
           watchSlidesProgress
           onProgress={handleProgress}
         >
-          {categoryIcons.map((icon) => (
+          {categoryIconsData.map((iconData) => (
             <SwiperSlide
-              key={icon.toString()}
+              key={iconData.name}
               className={styles.iconPickerSlide}
               style={{ color: colorScheme.color }}
             >
-              {icon()}
+              {iconData.icon()}
             </SwiperSlide>
           ))}
         </Swiper>

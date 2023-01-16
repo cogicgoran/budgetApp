@@ -1,27 +1,25 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { NavigationOptions } from "swiper/types/modules/navigation";
-import { CSSSelector } from "swiper/types/shared";
-import { categoryColors } from "../../utils/common";
+import { categoryColors, ColorScheme } from "../../utils/common";
 import { IconChevronLeft } from "../icons/ChevronLeft";
 import { IconChevronRight } from "../icons/ChevronRight";
 import styles from "./addCategory.module.scss";
 import CategoryShowcase from "./CategoryShowcase";
-import ColorItem from "./ColorItem";
 import "swiper/css";
 import "swiper/css/navigation";
 import type SwiperClass from "swiper";
-import { ColorScheme, useCategoryPickerContext } from "./AddCategory";
 import { flushSync } from "react-dom";
 import classNames from "classnames";
+import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
 
 interface Props {
   onCancel: any;
+  onSubmit: any;
 }
 
-function CategoryColorPicker({ onCancel }: Props) {
-  const { iconIndex, colorScheme, setColorScheme } = useCategoryPickerContext();
+function CategoryColorPicker({ onCancel, onSubmit }: Props) {
+  const { setColorScheme } = useCategoryPickerContext();
   const { t } = useTranslation();
   const textAdd = t("add");
   const textAddCategory = t("addCategory");
@@ -51,9 +49,10 @@ function CategoryColorPicker({ onCancel }: Props) {
 
   function handleProgress(swiper: SwiperClass) {
     if (isFirstRenderRef.current) return;
-    const newIndex = swiper.realIndex;
 
+    const newIndex = swiper.realIndex;
     if (newIndex == undefined) return;
+
     const newColorScheme = { ...categoryColors[newIndex] };
     updateColors(newColorScheme);
   }
@@ -125,9 +124,9 @@ function CategoryColorPicker({ onCancel }: Props) {
         <button className={styles.addCategoryCancel} onClick={onCancel}>
           {textCancel}
         </button>
-        {/* <button className={styles.addCategoryConfirm} onClick={onSubmit}>
+        <button className={styles.addCategoryConfirm} onClick={onSubmit}>
           {textAdd}
-        </button> */}
+        </button>
       </div>
     </div>
   );
