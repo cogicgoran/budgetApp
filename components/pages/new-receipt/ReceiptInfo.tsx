@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { PATHS } from "../../../utils/constants";
 import styles from "./receiptInfo.module.scss";
 import { useMarketplaces } from "../../../hooks/useMarketplaces";
 import { useCurrencies } from "../../../hooks/useCurrencies";
+import { useNewReceiptContext } from "../../../context/NewReceiptContext";
 
 interface Props {
   onChangeValue: Function;
@@ -13,14 +14,13 @@ interface Props {
 
 function ReceiptInfo(props: Props) {
   const { t } = useTranslation();
+  const { marketplaces, currencies } = useNewReceiptContext();
   const textMarketplace = t("marketplace");
   const textDate = t("date");
   const textCurrency = t("currency");
   const textChoose = t("choose");
-  const { marketplaces, isLoading: marketplaceIsLoading } = useMarketplaces();
-  const { currencies, isLoading: currencyIsLoading } = useCurrencies();
 
-  function changeHandler(e: any) {
+  function changeHandler(e: ChangeEvent<any>) {
     props.onChangeValue((prevState: any) => {
       return {
         ...prevState,
@@ -33,9 +33,8 @@ function ReceiptInfo(props: Props) {
     <div className={styles.receiptWrapper}>
       <div className={styles.receiptInfoItem}>
         <label htmlFor="marketplace">{textMarketplace}:</label>
-        {marketplaceIsLoading && <p>Loading...</p>}
 
-        {!marketplaceIsLoading && marketplaces && (
+        {!!marketplaces.length && (
           <select
             name="marketplace"
             id="marketplace"
@@ -52,7 +51,7 @@ function ReceiptInfo(props: Props) {
             ))}
           </select>
         )}
-        {!marketplaceIsLoading && !marketplaces && (
+        {!marketplaces.length && (
           <span>
             There are no marketplaces found in the database. You can add one{" "}
             <Link href={PATHS.MARKETPLACES}>
@@ -75,8 +74,7 @@ function ReceiptInfo(props: Props) {
 
       <div className={styles.receiptInfoItem}>
         <label htmlFor="currency">{textCurrency}:</label>
-        {currencyIsLoading && <p>Loading...</p>}
-        {!currencyIsLoading && currencies && (
+        {currencies.length && (
           <select
             name="currency"
             id="currency"
@@ -86,14 +84,14 @@ function ReceiptInfo(props: Props) {
             <option hidden value="">
               {textChoose}
             </option>
-            {currencies.map((currency: any) => (
-              <option key={currency.code} value={currency.code}>
+            {currencies.map((currency) => (
+              <option key={currency.code} value={currency.id}>
                 {currency.code}
               </option>
             ))}
           </select>
         )}
-        {!currencyIsLoading && !currencies && (
+        {!currencies.length && (
           <span>
             There are no currencies found in the database. You can add one{" "}
             <Link href={PATHS.CURRENCIES}>

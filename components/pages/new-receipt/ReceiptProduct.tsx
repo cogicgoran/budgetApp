@@ -1,32 +1,40 @@
-import React from 'react';
-import { IconTrashCan } from '../../icons/TrashCan';
-import styles from './receiptProduct.module.css';
+import React from "react";
+import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { IconTrashCan } from "../../icons/TrashCan";
+import { FormDataArticle } from "./ReceiptAddProduct";
 
 interface Props {
-    onRemoveArticle: Function;
-    id: number
-    name: string;
-    category: string;
-    price: number;
-    currency: string;
+  onRemoveArticle: Function;
+  article: FormDataArticle;
+  currencyId: string;
 }
 
-function ReceiptProduct(props: Props) {
+function ReceiptProduct({
+  article,
+  onRemoveArticle,
+  currencyId
+}: Props) {
+  const {currencies} = useNewReceiptContext()
   function removeHandler() {
-    props.onRemoveArticle(props.id);
+    onRemoveArticle(article.uuid);
   }
+
+  const currencyCode = currencies.find(currency => currency.id.toString() === currencyId)?.code;
 
   return (
     <tr>
-      <td>{props.name}</td>
-      <td><span>{props.category}</span></td>
-      <td>{props.price.toFixed(2)} {props.currency}</td>
+      <td>{article.name}</td>
+      <td>
+        <span>{article.category.name}</span>
+      </td>
+      <td>
+        {article.price.toFixed(2)} {currencyCode}
+      </td>
       <td onClick={removeHandler}>
-        {/* <FontAwesomeIcon className={styles['receipt-product-icon']} icon={solid('trash-alt')}/> */}
         <IconTrashCan />
-        </td>
+      </td>
     </tr>
   );
-};
+}
 
 export default ReceiptProduct;
