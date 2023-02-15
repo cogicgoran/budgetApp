@@ -1,4 +1,4 @@
-.new-product {
+.newProduct {
   box-sizing: content-box;
   position: fixed;
   display: flex;
@@ -14,31 +14,31 @@
   font-size: 14px;
 }
 
-.new-product__controls button,
-.new-product h4 {
+.newProductControls button,
+.newProduct h4 {
   text-transform: uppercase;
 }
 
-.new-product h4 {
+.newProduct h4 {
   margin-top: 0;
   font-weight: normal;
   font-size: 18px;
   text-align: center;
 }
 
-.new-product input::placeholder {
+.newProduct input::placeholder {
   font-style: italic;
   color: #90c3d0;
 }
 
-.new-product__add-button {
+.newProductAddButton {
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
   transition: background-color 300ms;
 }
 
-.new-product-input {
+.newProductInput {
   display: grid;
   align-items: center;
   grid-template-columns: 14ch 30ch;
@@ -46,12 +46,18 @@
   margin-bottom: 0.2em;
 }
 
-.new-product-input input {
+.newProductInput input {
   padding: 0.1em 0.2em;
   border: 1px solid #90c3d0;
 }
 
-.new-product__controls {
+.newProductInput select {
+  background-color: inherit;
+  padding: 0.1em 0.2em;
+  border: 1px solid #90c3d0;
+}
+
+.newProductControls {
   margin-top: 3em;
   display: flex;
   justify-content: center;
@@ -59,34 +65,35 @@
   font-size: 10px;
 }
 
-.new-product__controls button {
+.newProductControls button {
   padding: 0.3em 1em;
   min-width: 16ch;
   border-radius: 1em;
   cursor: pointer;
 }
 
-.new-product__add-article-btn {
+.newProductAddArticleBtn {
   background-color: #60a917;
   border: 1px solid #2d7600;
 }
 
-.new-product__cancel-btn {
+.newProductCancelBtn {
   background-color: #fad9d5;
   border: 1px solid #ae4132;
 }
 
-.new-product__add-article-btn.disabled {
+.newProductAddArticleBtn.disabled {
   cursor: not-allowed;
   background-color: #d5e8d4;
   border-color: #b9e0a5;
   color: white;
 }
 
-.new-product-input.invalid label {
+.newProductInput.invalid label {
   color: red;
 }
 
-.new-product-input.invalid input {
+.newProductInput.invalid input,
+.newProductInput.invalid select {
   border-color: red;
 }

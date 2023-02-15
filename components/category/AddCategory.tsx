@@ -39,7 +39,7 @@ function AddCategory({ onCancel, onAddCategory }: Props) {
 
   async function addCategory() {
     try {
-      if (!categoryName.trim()) return; // how to handle no input name?
+      if (!categoryName.trim()) throw new Error('Missing category name');
       const payload = createCategoryPayload({
         color: colorScheme.color,
         icon: iconData.name,

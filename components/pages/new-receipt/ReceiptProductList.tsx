@@ -2,19 +2,26 @@ import React from "react";
 import styles from "./receiptProductList.module.scss";
 import { useTranslation } from "react-i18next";
 import ReceiptProduct from "./ReceiptProduct";
+import { Article } from "@prisma/client";
+import { FormDataArticle } from "./ReceiptAddProduct";
+import { useNewReceiptContext } from "../../../context/NewReceiptContext";
 
 interface Props {
-  onRemoveArticle: Function;
-  currency: string;
+  onRemoveArticle: (id: string) => void;
+  selectedCurrencyId: string;
   total: any;
-  articleList: any[];
+  articleList: FormDataArticle[];
 }
 
-function ReceiptProductList(props: Props) {
+function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,total}: Props) {
+  const {currencies} = useNewReceiptContext()
   const { t } = useTranslation();
   const textProductName = t("productName");
   const textCategory = t("category");
   const textPrice = t("price");
+
+  const currencyCode = currencies.find(currency => currency.id.toString() === selectedCurrencyId)?.code;
+
 
   return (
     <div>
@@ -28,22 +35,20 @@ function ReceiptProductList(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {/* TODO: Add custom id instead of index */}
-          {props.articleList.map((article: any, index: any) => {
+          {articleList.map((article) => {
             return (
               <ReceiptProduct
-                key={index}
-                onRemoveArticle={props.onRemoveArticle}
-                {...article}
-                id={index}
-                currency={props.currency}
+                key={article.uuid}
+                onRemoveArticle={onRemoveArticle}
+                article={article}
+                currencyId={selectedCurrencyId}
               />
             );
           })}
         </tbody>
       </table>
       <span className={styles["new-receipt-total"]}>
-        {props.total.toFixed(2)} {props.currency}
+        {total.toFixed(2)} {currencyCode}
       </span>
     </div>
   );

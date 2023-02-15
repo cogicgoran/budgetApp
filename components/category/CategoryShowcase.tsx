@@ -1,48 +1,86 @@
-import React from "react";
+import React, { ReactNode, useState } from "react";
 import styles from "./addCategory.module.scss";
-import { useTranslation } from "react-i18next";
-import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
+import { ColorScheme } from "../../utils/common";
+import cn from "classnames";
+import { Tooltip } from "react-tooltip";
 
-function CategoryShowcase() {
-  const {
-    colorScheme,
-    iconData,
-    categoryName,
-    setCategoryName,
-    setShowIconPicker,
-  } = useCategoryPickerContext();
-  const { t } = useTranslation();
-  const textTypeHere = t("typeHere");
+interface Props {
+  colorScheme: ColorScheme;
+  icon: () => ReactNode;
+  name: string;
+  readonly?: boolean;
+  onChange?: any;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
+  onShowcaseClick?: any;
+  showcasePlaceholder?: string;
+  isSliderOverlay?: boolean;
+}
+
+function CategoryShowcase({
+  colorScheme,
+  icon,
+  name,
+  readonly = true,
+  onChange,
+  onClick,
+  onShowcaseClick,
+  showcasePlaceholder,
+  isSliderOverlay = false,
+}: Props) {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
+  function handleHoverOver() {
+    setIsTooltipOpen(true)
+  }
+
+  function handleHoverLeave() {
+    setIsTooltipOpen(false);
+  }
 
   return (
     <div
       style={{ borderColor: colorScheme.borderColor }}
-      className={styles.categoryShowcase}
-      onClick={() => setShowIconPicker((prevState) => !prevState)}
+      className={cn(
+        "w-[100px]",
+        "border-2 border-solid rounded-t-2xl",
+        "my-[12px] mx-auto",
+        { "absolute top-2 left-1/2 translate-x-[-50%]": isSliderOverlay }
+      )}
+      onClick={onShowcaseClick}
     >
       <div
         style={{ color: colorScheme.color }}
-        className={styles.categoryShowcaseImage}
+        className={cn(
+          "flex justify-center items-center",
+          "h-[80px]",
+          styles.categoryShowcaseImage
+        )}
       >
-        {iconData.icon()}
+        {icon()}
       </div>
-      <div
-        style={{
-          backgroundColor: colorScheme.color,
-          borderColor: colorScheme.borderColor,
-        }}
-        className={styles.categoryShowcaseName}
-      >
         <input
-          className={styles.categoryShowcaseInput}
+          className={cn(
+            "block w-full border-0 border-t-2 border-solid",
+            "text-center uppercase text-ellipsis whitespace-nowrap",
+            "text-[14px] text-white",
+            "focus:outline-0"
+          )}
+          style={{
+            backgroundColor: colorScheme.color,
+            borderColor: colorScheme.borderColor,
+          }}
           type="text"
-          placeholder={textTypeHere}
-          value={categoryName}
-          onClick={(e) => e.stopPropagation()}
-          onChange={(e) => setCategoryName(e.target.value)}
+          placeholder={!readonly ? showcasePlaceholder : ""}
+          value={name}
+          disabled={readonly}
+          onClick={onClick}
+          onChange={onChange}
+          id={name}
+          data-tooltip-content={name}
+          onMouseOver={handleHoverOver}
+          onMouseLeave={handleHoverLeave}
         />
-        {categoryName && <p className={styles.tooltipText}>{categoryName}</p>}
-      </div>
+        <Tooltip anchorId={name} isOpen={isTooltipOpen} />
     </div>
   );
 }

@@ -1,20 +1,22 @@
 import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./addCategory.module.scss";
-import { categoryIconsData } from "../../utils/common";
+import { categoryIconsData, getIconByName } from "../../utils/common";
 import classNames from "classnames";
 import TransparentCategoryShowcase from "./TransparentCategoryShowcase";
 import { NextArrow, PrevArrow } from "./CategoryColorPicker";
 import { flushSync } from "react-dom";
 import { useCategoryPickerContext } from "../../context/CategoryPickerContext";
 import type SwiperClass from "swiper";
+import CategoryShowcase from "./CategoryShowcase";
 
 interface Props {
   onCancel: any;
 }
 
 function CategoryIconPicker({ onCancel }: Props) {
-  const { setIconData, colorScheme } = useCategoryPickerContext();
+  const { iconData, setIconData, colorScheme, categoryName } =
+    useCategoryPickerContext();
   const swiperRef = useRef<HTMLDivElement | null>(null);
   const swiperInstanceRef = useRef<SwiperClass | null>(null);
   const prevRef = useRef(null);
@@ -97,7 +99,12 @@ function CategoryIconPicker({ onCancel }: Props) {
         >
           <NextArrow />
         </div>
-        <TransparentCategoryShowcase />
+        <CategoryShowcase
+          colorScheme={colorScheme}
+          icon={() => null}
+          name={categoryName}
+          isSliderOverlay={true}
+        />
       </div>
     </div>
   );

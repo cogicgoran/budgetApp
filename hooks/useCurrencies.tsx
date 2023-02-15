@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Currency } from "../types/currency";
 import { getCurrencies } from "../utils/function/api/currency";
 
 export function useCurrencies() {
-  const [currencies, setCurrencies] = useState<any[]>([]);
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

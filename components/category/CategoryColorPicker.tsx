@@ -19,11 +19,21 @@ interface Props {
 }
 
 function CategoryColorPicker({ onCancel, onSubmit }: Props) {
-  const { setColorScheme } = useCategoryPickerContext();
+  const {
+    showIconPicker,
+    setShowIconPicker,
+    setIconData,
+    setCategoryName,
+    iconData,
+    categoryName,
+    colorScheme,
+    setColorScheme,
+  } = useCategoryPickerContext();
   const { t } = useTranslation();
   const textAdd = t("add");
   const textAddCategory = t("addCategory");
   const textCancel = t("cancel");
+  const textTypeHere = t("typeHere")
   const swiperRef = useRef<HTMLDivElement | null>(null);
   const swiperInstanceRef = useRef<SwiperClass | null>(null);
   const isFirstRenderRef = useRef(true);
@@ -66,7 +76,16 @@ function CategoryColorPicker({ onCancel, onSubmit }: Props) {
   return (
     <div className={classNames(styles.categoryColorSelect, "colorPicker")}>
       <h3 className={styles.addCategoryTitle}>{textAddCategory}</h3>
-      <CategoryShowcase />
+      <CategoryShowcase
+        colorScheme={colorScheme}
+        icon={iconData.icon}
+        name={categoryName}
+        onShowcaseClick={() => setShowIconPicker((prevState) => !prevState)}
+        onClick={(e: any) => e.stopPropagation()}
+        onChange={(e: any) => setCategoryName(e.target.value)}
+        readonly={false}
+        showcasePlaceholder={textTypeHere}
+      />
 
       <div style={{ position: "relative" }}>
         <Swiper

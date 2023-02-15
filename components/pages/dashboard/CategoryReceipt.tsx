@@ -1,16 +1,32 @@
+import classNames from "classnames";
 import React from "react";
+import { getColorSchemeByMainColor } from "../../../utils/common";
+import CategoryPill from "../../UI/category-pill/CategoryPill";
 import styles from "./dashboardMonthly.module.scss";
 
 interface Props {
-  category_name: string;
-  category_value: number;
+  categoryName: string;
+  categoryTotal: number;
+  categoryMainColor: string;
+  categoryIcon: string;
 }
 
-function CategoryReceipt(props: Props) {
+function CategoryReceipt({
+  categoryName,
+  categoryTotal,
+  categoryMainColor,
+  categoryIcon,
+}: Props) {
+
   return (
     <div className={styles["dashboardCurrentMonthCategory"]}>
-      <span>{props.category_name}</span>
-      <span>{props.category_value} RSD</span>
+      <CategoryPill
+        iconName={categoryIcon}
+        mainColor={categoryMainColor}
+      >
+        {categoryName}
+      </CategoryPill>
+      <span className="text-[#660000]">{categoryTotal} RSD</span>
     </div>
   );
 }

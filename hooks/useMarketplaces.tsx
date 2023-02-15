@@ -1,10 +1,11 @@
+import { Marketplace } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IMarketplace } from "../types/marketplace";
 import { getMarketplaces } from "../utils/function/api/marketplace";
 
 export function useMarketplaces() {
-  const [marketplaces, setMarketplaces] = useState<IMarketplace[]>([]);
+  const [marketplaces, setMarketplaces] = useState<Marketplace[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

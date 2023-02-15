@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { getMonthlyReport } from "../utils/function/api/receipt";
+import { getMonthlyReport, MonthlyReport } from "../utils/function/api/receipt";
 import { handleIncomingArticles } from "../utils/function/common";
 
 export function useMonthlyReport() {
-  const [[categories, total], setReceipts] = useState<any>([null, null]);
+  const [monthlyReport, setReceipts] = useState<MonthlyReport>();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -14,9 +14,8 @@ export function useMonthlyReport() {
   async function getReport() {
     setIsLoading(true);
     try {
-      const reportData = (await getMonthlyReport()) as any;
-      const report = handleIncomingArticles(reportData);
-      setReceipts(report);
+      const reportData = await getMonthlyReport();
+      setReceipts(reportData);
     } catch (error) {
       console.error(error);
       toast.error("Failed to get monthly report");
@@ -25,5 +24,5 @@ export function useMonthlyReport() {
     }
   }
 
-  return {categories, total, isLoading};
+  return { monthlyReport, isLoading };
 }

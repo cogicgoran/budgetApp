@@ -17,11 +17,6 @@
   background-color: #f5fdff;
 }
 
-.colorSlider {
-  width: 188px;
-  margin: 0 auto;
-}
-
 .addCategoryControls {
   margin-top: 3em;
   display: flex;
@@ -56,24 +51,6 @@
   text-transform: uppercase;
 }
 
-.categoryShowcase {
-  border-width: 2px;
-  border-style: solid;
-  width: 100px;
-  margin: 12px auto;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-}
-
-.categoryShowcaseImage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.6rem;
-  font-size: 1.4rem;
-  height: 80px;
-}
-
 .categoryShowcaseImage svg {
   fill: currentColor;
   max-width: 60px;
@@ -82,78 +59,22 @@
   width: 60px;
 }
 
-.categoryShowcaseName {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-  padding: 0.1rem;
-  border-top: 2px solid;
-  font-weight: 300;
-  font-size: 0.7rem;
-  color: white;
-  text-transform: uppercase;
-}
+// .tooltipText {
+//   position: absolute;
+//   display: flex;
+//   height: fit-content;
+//   left: 0 - 25%;
+//   top: 100%;
+//   visibility: hidden;
+//   background-color: #222;
+//   text-align: center;
+//   padding: 5px 3px;
+//   border-radius: 6px;
+//   bottom: 100%;
+//   z-index: 5;
+// }
 
-.categoryShowcaseInput {
-  width: 100%;
-  text-align: center;
-  text-transform: uppercase;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
 
-.categoryShowcaseInput:focus {
-  outline: none;
-}
-
-.tooltipText {
-  position: absolute;
-  visibility: hidden;
-  background-color: #222;
-  text-align: center;
-  padding: 5px 3px;
-  border-radius: 6px;
-  bottom: 100%;
-  z-index: 5;
-}
-
-.categoryShowcaseName:hover .tooltipText {
-  visibility: visible;
-}
-
-.color-slider {
-  width: 188px;
-  margin: 0 auto;
-}
-
-.add-category__controls {
-  margin-top: 3em;
-  display: flex;
-  justify-content: center;
-  gap: 4em;
-  font-size: 10px;
-}
-
-.add-category__controls button {
-  text-transform: uppercase;
-  padding: 0.3em 1em;
-  min-width: 16ch;
-  border-radius: 1em;
-  cursor: pointer;
-}
-
-.add-category__cancel {
-  background-color: #fad9d5;
-  border: 1px solid #ae4132;
-}
-
-.add-category__confirm {
-  background-color: #60a917;
-  border: 1px solid #2d7600;
-}
 
 .addCategoryTitle {
   color: #1a4e5b;
@@ -218,19 +139,6 @@
     fill: currentColor;
     height: 20px;
   }
-}
-
-.categoryShowcaseTransparent {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 2px;
-  border-style: solid;
-  width: 100px;
-  margin: 12px auto;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
 }
 
 .sliderIconArrow {

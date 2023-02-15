@@ -5,8 +5,7 @@ import CategoryReceipt from "./CategoryReceipt";
 import { useMonthlyReport } from "../../../hooks/useMonthlyReport";
 
 function DashboardMonthly() {
-  const { categories, total, isLoading } = useMonthlyReport();
-  const categoriesExist = categories && categories.length > 0;
+  const { monthlyReport, isLoading } = useMonthlyReport();
 
   const textCurrentMonth = (
     <Trans components={{ br: <br /> }}>currentMonth</Trans>
@@ -18,27 +17,30 @@ function DashboardMonthly() {
         <span>{textCurrentMonth}</span>
       </div>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && (
+      {!isLoading && monthlyReport !== undefined &&
         <>
           <div className={styles.dashboardCurrentMonthTotal}>
             <span>
-              {total} <br /> RSD
+              {monthlyReport.total} <br /> {monthlyReport.currency}
             </span>
           </div>
           <div className={styles.dashboardCurrentMonthCategories}>
-            {categoriesExist
-              ? categories.map((category: any) => {
+            {monthlyReport.perCategory.length > 0 
+              ? monthlyReport.perCategory.map((categoryData) => {
                   return (
                     <CategoryReceipt
-                      key={category.category_name}
-                      {...category}
+                      key={categoryData.category.id}
+                      categoryName={categoryData.category.name}
+                      categoryTotal={categoryData.total}
+                      categoryMainColor={categoryData.category.color}
+                      categoryIcon={categoryData.category.icon}
                     />
                   );
                 })
-              : "No categories"}
+              : "No data"}
           </div>
         </>
-      )}
+      }
     </div>
   );
 }

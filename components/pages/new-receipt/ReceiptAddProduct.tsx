@@ -1,25 +1,59 @@
 import React from "react";
-import { Formik, Field, Form } from "formik";
 import { useTranslation } from "react-i18next";
-import isEmpty from "lodash.isempty";
-import * as Yup from "yup";
 import styles from "./receiptAddProduct.module.scss";
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
-  category: Yup.string().required("Required"),
-  price: Yup.number().min(0).required("Required"),
-});
+import classNames from "classnames";
+import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { uuidv4 } from "@firebase/util";
 
 interface Props {
-  onAddArticle: Function;
+  onAddArticle: (article: FormDataArticle) => void;
   onCancel: Function;
-  currency: any;
+}
+
+const schema = z.object({
+  name: z
+    .string({ invalid_type_error: "Invalid name" })
+    .min(1, { message: "Name must contain at least 1 character" }),
+  category: z.string({
+    invalid_type_error: "Please select an article category",
+  }),
+  price: z
+    .number({ coerce: true, invalid_type_error: "Invalid price" })
+    .positive({ message: "Price must be positive" }),
+});
+
+function getInitialFormValues() {
+  return {
+    name: "",
+    category: null as string | null,
+    price: "",
+  };
+}
+
+type AddArticleFormValues = ReturnType<typeof getInitialFormValues>;
+
+export interface FormDataArticle {
+  uuid: string;
+  name: string;
+  price: number;
+  category: { color: string; icon: string; id: number; name: string };
 }
 
 function ReceiptAddProduct(props: Props) {
+  const {
+    register,
+    formState: { errors },
+    watch,
+    handleSubmit,
+  } = useForm<AddArticleFormValues>({
+    defaultValues: getInitialFormValues(),
+    resolver: zodResolver(schema),
+  });
+  const { categories } = useNewReceiptContext();
   const { t } = useTranslation();
-
   const textAdd = t("add");
   const textAddProduct = t("addProduct");
   const textCategory = t("category");
@@ -27,103 +61,85 @@ function ReceiptAddProduct(props: Props) {
   const textName = t("name");
   const textPrice = t("price");
 
-  function handleSubmit(values: any) {
+  const formValues = watch();
+
+  function onSubmit(values: AddArticleFormValues) {
     props.onAddArticle({
+      uuid: uuidv4(),
       name: values.name.trim(),
-      category: values.category.trim(),
-      price: Number(values.price.trim()),
+      category: categories.find(
+        (category) => category.id === Number(values.category!)
+      )!,
+      price: Number(values.price),
     });
 
     props.onCancel();
   }
 
-  const inputClass = styles["new-product-input"];
-  const inputErrorClass = [styles["new-product-input"], styles["invalid"]].join(
-    " "
-  );
+  function onInvalid(a: any) {
+    console.log("err", a);
+  }
 
-  const buttonClass = styles["new-product__add-article-btn"];
-  const buttonClassDisabled = [
-    styles["new-product__add-article-btn"],
-    styles["disabled"],
-  ].join(" ");
+  const submitAction = handleSubmit(onSubmit, onInvalid);
 
   return (
-    <div className={styles["new-product"]}>
+    <div className={styles.newProduct}>
       <div>
         <h4>{textAddProduct}</h4>
-        <Formik
-          initialValues={{
-            name: "",
-            category: "",
-            price: "",
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ errors, touched }) => (
-            <Form>
-              <div
-                className={
-                  touched.name && errors.name ? inputErrorClass : inputClass
-                }
-              >
-                <label htmlFor="name">{textName}:</label>
-                <Field
-                  id="name"
-                  name="name"
-                  placeholder={`${textName}...`}
-                ></Field>
-              </div>
-              <div
-                className={
-                  touched.category && errors.category
-                    ? inputErrorClass
-                    : inputClass
-                }
-              >
-                <label htmlFor="category">{textCategory}:</label>
-                <Field
-                  id="category"
-                  name="category"
-                  placeholder={`${textCategory}...`}
-                ></Field>
-              </div>
-              <div
-                className={
-                  touched.price && errors.price ? inputErrorClass : inputClass
-                }
-              >
-                <label htmlFor="price">{textPrice}:</label>
-                <Field
-                  id="price"
-                  name="price"
-                  placeholder={`${textPrice}...`}
-                ></Field>
-              </div>
-              <div className={styles["new-product__controls"]}>
-                <button
-                  className={styles["new-product__cancel-btn"]}
-                  type="button"
-                  onClick={props.onCancel as any}
-                >
-                  {textCancel}
-                </button>
-                <button
-                  className={
-                    isEmpty(errors) && !isEmpty(touched)
-                      ? buttonClass
-                      : buttonClassDisabled
-                  }
-                  type="submit"
-                  disabled={!isEmpty(errors)}
-                >
-                  {textAdd}
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+        <form id="article-form" name="article-form" onSubmit={submitAction}>
+          <div
+            className={classNames(styles.newProductInput, {
+              [styles.invalid]: errors.name,
+            })}
+          >
+            <label htmlFor="name">{textName}:</label>
+            <input {...register("name")} placeholder={textName} />
+          </div>
+          <div
+            className={classNames(styles.newProductInput, {
+              [styles.invalid]: errors.category,
+            })}
+          >
+            <label htmlFor="category">{textCategory}:</label>
+            <select {...register("category")}>
+              <option selected value="" hidden>
+                {textCategory}
+              </option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div
+            className={classNames(styles.newProductInput, {
+              [styles.invalid]: errors.price,
+            })}
+          >
+            <label htmlFor="price">{textPrice}:</label>
+            <input {...register("price")} placeholder={textPrice} />
+          </div>
+          <div className={styles.newProductControls}>
+            <button
+              className={styles.newProductCancelBtn}
+              type="button"
+              onClick={props.onCancel as any}
+            >
+              {textCancel}
+            </button>
+            <button
+              className={classNames(styles.newProductAddArticleBtn, {
+                [styles.disabled]: false,
+              })}
+              type="button"
+              disabled={false}
+              onClick={submitAction}
+            >
+              {textAdd}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

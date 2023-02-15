@@ -23,19 +23,45 @@ const currencies = [
   },
 ];
 
+const marketplaces = [
+  {
+    id: 1,
+    name: "IDEA",
+    address: "Jožefa Atile 6, Novi Sad, Serbia",
+  },
+  {
+    id: 2,
+    name: "Univerexport",
+    address: "Bulevar patrijarha Pavla 6, Novi Sad, Serbia",
+  },
+];
+
+async function seedCurrencies(prisma: PrismaClient) {
+  await prisma.currency.createMany({
+    data: currencies,
+    skipDuplicates: true,
+  });
+  console.log("Currencies seeded successfully!");
+}
+
+async function seedMarketplaces(prisma: PrismaClient) {
+  await prisma.marketplace.createMany({
+    data: marketplaces,
+    skipDuplicates: true,
+  });
+  console.log("Marketplaces seeded successfully!");
+}
+
 async function main() {
   const prisma = new PrismaClient();
   try {
-    await prisma.currency.createMany({
-      data: currencies,
-      skipDuplicates: true
-    });
-    console.log("Currencies seeded successfully!");
+    await seedCurrencies(prisma);
+    await seedMarketplaces(prisma);
+    console.log("Seeding completed");
   } catch (error: unknown) {
     console.error(JSON.stringify(error, null, 2));
-    console.error("Failed to seed currencies");
-  }
-  finally {
+    console.error("Seeding failed.");
+  } finally {
     await prisma.$disconnect();
   }
 }
