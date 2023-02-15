@@ -31,7 +31,7 @@ function Receipt(props: DashboardReceipt) {
         "grid items-center gap-x-[2px]",
         "px-2 py-0.5",
         "border border-solid border-[#90c3d0] rounded",
-        "mb-2",
+        "mb-1",
         "text-xs",
         styles.dashboardReceipt
       )}
