@@ -1,11 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../prisma/lib/prisma";
+import {
+  queryRecentReceipts,
+} from "../../../server/repository/receipt";
+import {
+  buildRecentReceipts,
+} from "../../../server/service/receipt";
 
 const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     try {
-      //get recent receipts
-      const recentReceipts: any = [];
+      const receipts = await queryRecentReceipts(prisma);
+      const recentReceipts = buildRecentReceipts(receipts);
       return res.json(recentReceipts);
     } catch (error) {
       console.log(error);

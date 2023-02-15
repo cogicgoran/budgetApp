@@ -22,31 +22,31 @@ export function handleIncomingArticles(articles: any[]) {
   });
 
   // Loops through each article in each receipt and updates mostSpentCategory in that receipt
-  for (const keyr in receiptsObj) {
-    if (Object.hasOwnProperty.call(receiptsObj, keyr)) {
-      receiptsObj[keyr].mostSpentCategory = { catName: "", catValue: -1 };
-      receiptsObj[keyr].articles.forEach((article: any) => {
-        if (!receiptsObj[keyr].categories[article.cat_name]) {
-          receiptsObj[keyr].categories[article.cat_name] = article.articlePrice;
-        } else {
-          receiptsObj[keyr].categories[article.cat_name] +=
-            article.articlePrice;
-        }
-      });
+  // for (const keyr in receiptsObj) {
+  //   if (Object.hasOwnProperty.call(receiptsObj, keyr)) {
+  //     receiptsObj[keyr].mostSpentCategory = { catName: "", catValue: -1 };
+  //     receiptsObj[keyr].articles.forEach((article: any) => {
+  //       if (!receiptsObj[keyr].categories[article.cat_name]) {
+  //         receiptsObj[keyr].categories[article.cat_name] = article.articlePrice;
+  //       } else {
+  //         receiptsObj[keyr].categories[article.cat_name] +=
+  //           article.articlePrice;
+  //       }
+  //     });
 
-      const categories = receiptsObj[keyr].categories;
-      for (const key in categories) {
-        if (Object.hasOwnProperty.call(categories, key)) {
-          if (categories[key] > receiptsObj[keyr].mostSpentCategory.catValue) {
-            receiptsObj[keyr].mostSpentCategory.catName = key;
-            receiptsObj[keyr].mostSpentCategory.catValue = categories[key];
-          }
-        }
-      }
-      delete receiptsObj[keyr].categories;
-      delete receiptsObj[keyr].articles;
-    }
-  }
+  //     const categories = receiptsObj[keyr].categories;
+  //     for (const key in categories) {
+  //       if (Object.hasOwnProperty.call(categories, key)) {
+  //         if (categories[key] > receiptsObj[keyr].mostSpentCategory.catValue) {
+  //           receiptsObj[keyr].mostSpentCategory.catName = key;
+  //           receiptsObj[keyr].mostSpentCategory.catValue = categories[key];
+  //         }
+  //       }
+  //     }
+  //     delete receiptsObj[keyr].categories;
+  //     delete receiptsObj[keyr].articles;
+  //   }
+  // }
   const receipts = [];
 
   for (const key in receiptsObj) {

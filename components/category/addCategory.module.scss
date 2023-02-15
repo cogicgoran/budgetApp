@@ -59,20 +59,22 @@
   width: 60px;
 }
 
-.tooltipText {
-  position: absolute;
-  visibility: hidden;
-  background-color: #222;
-  text-align: center;
-  padding: 5px 3px;
-  border-radius: 6px;
-  bottom: 100%;
-  z-index: 5;
-}
+// .tooltipText {
+//   position: absolute;
+//   display: flex;
+//   height: fit-content;
+//   left: 0 - 25%;
+//   top: 100%;
+//   visibility: hidden;
+//   background-color: #222;
+//   text-align: center;
+//   padding: 5px 3px;
+//   border-radius: 6px;
+//   bottom: 100%;
+//   z-index: 5;
+// }
 
-.categoryShowcaseName:hover .tooltipText {
-  visibility: visible;
-}
+
 
 .addCategoryTitle {
   color: #1a4e5b;

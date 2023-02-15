@@ -15,6 +15,7 @@ import { createReceipt } from "../../utils/function/api/receipt";
 import { useRouter } from "next/router";
 import { PATHS } from "../../utils/constants";
 import { Category } from "@prisma/client";
+import { ReceiptDto } from "../../utils/dto/receipt.dto";
 
 interface Props {}
 
@@ -49,16 +50,16 @@ function ReceiptForm({}: Props) {
     currency: string;
     articles: FormDataArticle[];
   }) {
-    return {
-      marketplaceId: data.marketplace,
+    return ReceiptDto.parse({
+      marketplaceId: Number(data.marketplace),
       date: data.date.toISOString(),
-      currencyId: data.currency,
+      currencyId: Number(data.currency),
       articles: data.articles.map((article) => ({
         name: article.name,
         category: { id: article.category.id },
         price: article.price,
       })),
-    };
+    });
   }
 
   async function submitHandler(e: any) {
@@ -67,15 +68,15 @@ function ReceiptForm({}: Props) {
       toast.error("Invalid receipt");
       return;
     }
-    const payload = createReceiptPayload({
-      marketplace: receiptInfo.marketplace,
-      date: new Date(receiptInfo.date),
-      currency: receiptInfo.currency,
-      articles: articles,
-    });
-
     setIsSubmitting(true);
     try {
+      const payload = createReceiptPayload({
+        marketplace: receiptInfo.marketplace,
+        date: new Date(receiptInfo.date),
+        currency: receiptInfo.currency,
+        articles: articles,
+      });
+
       await createReceipt(payload);
       router.push(PATHS.DASHBOARD);
     } catch (error) {

@@ -6,27 +6,40 @@ import { IconPenToSquare } from "../../icons/PenToSquare";
 import { IconTrashCan } from "../../icons/TrashCan";
 import { PATHS } from "../../../utils/constants";
 import styles from "./receiptRow.module.scss";
-
-interface Props {
-  receipt_id: number;
-  mostSpentCategory: {
-    catName: string;
-  };
-  receipt_date: string;
-  shop_name: string;
-  receipt_price: number;
-  currency: string;
-}
+import cn from "classnames";
+import { DashboardReceipt } from "../../../hooks/useRecentReceipts";
+import CategoryPill from "../../UI/category-pill/CategoryPill";
+import { getColorSchemeByMainColor } from "../../../utils/common";
 
 const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function Receipt(props: Props) {
-  const date = new Date(props.receipt_date);
+function formatCurrencyNumberText(price: number, code: string) {
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: code,
+    currencyDisplay: "code",
+  })
+    .format(price)
+    .replace(code, "");
+}
 
+function Receipt(props: DashboardReceipt) {
+  const date = new Date(props.date);
   return (
-    <article className={styles.dashboardReceipt}>
-      <CategoryCard category={props.mostSpentCategory.catName} />
-      <div>{props.shop_name}</div>
+    <article
+      className={cn(
+        "grid items-center gap-x-[2px]",
+        "px-2 py-0.5",
+        "border border-solid border-[#90c3d0] rounded",
+        "mb-2",
+        "text-xs",
+        styles.dashboardReceipt
+      )}
+    >
+      <CategoryPill  iconName={props.mostSpentCategory.icon} mainColor={props.mostSpentCategory.color} >
+        {props.mostSpentCategory.name}
+      </CategoryPill>
+      <div>{props.shopName}</div>
       <div>
         {weekday[date.getDay()]},{" "}
         {date.toLocaleDateString("en-GB", {
@@ -35,19 +48,23 @@ function Receipt(props: Props) {
           year: "numeric",
         })}
       </div>
-      <div>
-        {props.receipt_price} {props.currency}
+      <div className="text-[#660000] text-left">
+        {formatCurrencyNumberText(props.price, props.currency)} {props.currency}
       </div>
       <div className={styles.dashboardReceiptActions}>
-        <Link href={PATHS.VIEW_RECEIPTS + "/" + props.receipt_id}>
-          <IconEye />
+        <Link href={PATHS.VIEW_RECEIPTS + "/" + props.id}>
+          <a>
+            <IconEye />
+          </a>
         </Link>
-        <Link href={PATHS.EDIT_RECEIPTS + "/" + props.receipt_id}>
-          <IconPenToSquare />
+        <Link href={PATHS.EDIT_RECEIPTS + "/" + props.id}>
+          <a>
+            <IconPenToSquare />
+          </a>
         </Link>
-        <div>
+        <span>
           <IconTrashCan />
-        </div>
+        </span>
       </div>
     </article>
   );

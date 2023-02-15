@@ -1,16 +1,31 @@
+import classNames from "classnames";
 import React from "react";
-import categoryStyleSheet from "../../utils/common";
+import categoryStyleSheet, {
+  getColorSchemeByMainColor,
+} from "../../utils/common";
 import styles from "./categoryCard.module.scss";
 
 interface Props {
-    category: string;
+  category: {
+    id: number;
+    name: string;
+    icon: string;
+    color: string;
+  };
 }
 
 function CategoryCard({ category }: Props) {
-  const catInfo = categoryStyleSheet[category.toLowerCase()] || categoryStyleSheet[20];
   return (
     <div>
-      <span style={{backgroundColor:catInfo.color, borderColor:catInfo.border}} className={styles["category-small"]}></span>
+      <span
+        style={{
+          backgroundColor: category.color,
+          borderColor: getColorSchemeByMainColor(category.color)?.borderColor,
+        }}
+        className={classNames(styles.categorySmall,"uppercase")}
+      >
+        {category.name}
+      </span>
     </div>
   );
 }

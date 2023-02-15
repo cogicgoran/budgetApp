@@ -1,38 +1,33 @@
 .dashboardReceipt {
-  display: grid;
-  align-items: center;
   grid-template-columns: 10em 20em 9em 8em 1fr;
-  column-gap: 0.2em;
-  padding: 0.2em 0.8em;
-  border: 1px solid #90c3d0;
-  border-radius: 4px;
-  margin-bottom: 0.4em;
-  font-size: 0.8em;
-  color: #1a4e5b;
-}
-
-.dashboardReceipt > :nth-child(4) {
-  color: #660000;
-  text-align: right;
 }
 
 .dashboardReceipt > :nth-child(5) > * {
-  margin-left: 1em;
+  margin-left: 2px;
 }
 
 .dashboardReceiptActions {
   display: flex;
   justify-content: flex-end;
   text-align: right;
-}
 
-.dashboardReceiptIcon {
-  font-size: 20px;
-  padding: 0.3em;
-  transition: background-color 200ms;
-  border-radius: 50%;
-}
+  a,
+  span {
+    padding: 0.3em;
+    transition: background-color 200ms;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 
-.dashboardReceiptIcon:hover {
-  background-color: #90c3d0;
+  a:hover,
+  span:hover {
+    color: #90c3d0;
+    background-color: grey;
+  }
+
+  svg {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+  }
 }
