@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useRecentReceipts } from "../../../hooks/useRecentReceipts";
 import { PATHS } from "../../../utils/constants";
 import styles from "./recentReceipts.module.scss";
+import Button from "../../UI/button/Button";
 
 function RecentReceipts() {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ function RecentReceipts() {
   const textAddNew = t("addNew");
   const textNoReceipts = t("noReceipts");
   const { receipts, isLoading } = useRecentReceipts();
-  
+
   return (
     <div className={styles.dashboardRecent}>
       <h2>{textRecentReceipts}</h2>
@@ -33,10 +34,14 @@ function RecentReceipts() {
         )}
         <div className={styles.dashboardRecentControls}>
           <Link key="seeMore" href={PATHS.VIEW_RECEIPTS}>
-            <button type="button">{textSeeMore}</button>
+            <Button actionType="info" type="button">
+              {textSeeMore}
+            </Button>
           </Link>
           <Link key="addReceipt" href={PATHS.NEW_RECEIPTS}>
-            <button type="button">{textAddNew}</button>
+            <Button actionType="success" type="button">
+              {textAddNew}
+            </Button>
           </Link>
         </div>
       </div>

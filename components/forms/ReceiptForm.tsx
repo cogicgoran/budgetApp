@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { PATHS } from "../../utils/constants";
 import { Category } from "@prisma/client";
 import { ReceiptDto } from "../../utils/dto/receipt.dto";
+import Button from "../UI/button/Button";
 
 interface Props {}
 
@@ -117,21 +118,13 @@ function ReceiptForm({}: Props) {
             />,
             document.getElementById("overlay-root")!
           )}
-        <button
-          className={styles["new-receipt__add-product"]}
-          type="button"
-          onClick={() => setShowModal(true)}
-        >
+        <Button actionType="create" onClick={() => setShowModal(true)}>
           + {textAddProduct}
-        </button>
-        <div className={styles["new-receipt-actions"]}>
-          <button
-            disabled={isSubmitting}
-            className={styles["new-receipt-finish-btn"]}
-            type="submit"
-          >
+        </Button>
+        <div className="text-center">
+          <Button actionType="success" disabled={isSubmitting}>
             {textFinish}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

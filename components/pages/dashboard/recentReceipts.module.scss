@@ -16,29 +16,14 @@
 
 .dashboardRecentControls {
   margin-top: 2em;
+  margin-bottom: 1em;
   text-align: center;
   font-size: 0.6em;
   color: white;
-}
 
-.dashboardRecentControls button {
-  cursor: pointer;
-  border-width: 1px;
-  border-style: solid;
-  padding: 0.4em 2em;
-  margin: 0 1em;
-  border-radius: 1em;
-  text-transform: uppercase;
-}
-
-.dashboardRecentControls button:nth-child(1) {
-  background-color: #1a4e5b;
-  border-color: #314354;
-}
-
-.dashboardRecentControls button:nth-child(2) {
-  background-color: #60a917;
-  border-color: #2d7600;
+  * {
+    margin: 0 1em;
+  }
 }
 
 .dashboardNoRecentResults {

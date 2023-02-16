@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { uuidv4 } from "@firebase/util";
+import Button from "../../UI/button/Button";
 
 interface Props {
   onAddArticle: (article: FormDataArticle) => void;
-  onCancel: Function;
+  onCancel: () => any;
 }
 
 const schema = z.object({
@@ -121,14 +122,14 @@ function ReceiptAddProduct(props: Props) {
             <input {...register("price")} placeholder={textPrice} />
           </div>
           <div className={styles.newProductControls}>
-            <button
-              className={styles.newProductCancelBtn}
+            <Button
               type="button"
-              onClick={props.onCancel as any}
+              actionType="fail"
+              onClick={props.onCancel}
             >
               {textCancel}
-            </button>
-            <button
+            </Button>
+            {/* <button
               className={classNames(styles.newProductAddArticleBtn, {
                 [styles.disabled]: false,
               })}
@@ -137,7 +138,10 @@ function ReceiptAddProduct(props: Props) {
               onClick={submitAction}
             >
               {textAdd}
-            </button>
+            </button> */}
+            <Button actionType="success" type="button" onClick={submitAction}>
+              {textAdd}
+            </Button>
           </div>
         </form>
       </div>
