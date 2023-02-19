@@ -118,11 +118,11 @@ function ReceiptForm({}: Props) {
             />,
             document.getElementById("overlay-root")!
           )}
-        <Button actionType="create" onClick={() => setShowModal(true)}>
+        <Button type="button" actionType="create" onClick={() => setShowModal(true)}>
           + {textAddProduct}
         </Button>
         <div className="text-center">
-          <Button actionType="success" disabled={isSubmitting}>
+          <Button type="submit" actionType="success" disabled={isSubmitting}>
             {textFinish}
           </Button>
         </div>
