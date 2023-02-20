@@ -15,7 +15,7 @@ export async function getMonthlyReport(): Promise<{
   return response.data;
 }
 
-export async function getRecentReceipts(): Promise<RecentReceipt[]> {
+export async function getRecentReceipts(): Promise<{recentReceipts:RecentReceipt[], recentCategories: Category[]}> {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/recentReceipts`;
   const response = await axios.get(url);
   return response.data;

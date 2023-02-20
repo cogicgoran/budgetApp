@@ -7,15 +7,13 @@ import RecentReceipts from "../components/pages/dashboard/RecentReceipts";
 import { firebaseAuthService } from "../config/firebase/service";
 import styles from "../components/pages/dashboard/dashboard.module.scss";
 import DashboardCategories from "../components/pages/dashboard/DashboardCategories";
+import { useRecentReceipts } from "../hooks/useRecentReceipts";
 
 const Home: NextPage = () => {
   const [user] = useAuthState(firebaseAuthService);
   const router = useRouter();
+  const { receipts, categories, isLoading } = useRecentReceipts();
 
-  if (!user) {
-    router.push("/auth");
-    return null;
-  }
 
   return (
     <>
@@ -25,9 +23,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.dashboard}>
-        <RecentReceipts />
+        <RecentReceipts receipts={receipts} isLoading={isLoading} />
         <DashboardMonthly />
-        <DashboardCategories/>
+        <DashboardCategories categories={categories} isLoading={isLoading} />
       </div>
     </>
   );

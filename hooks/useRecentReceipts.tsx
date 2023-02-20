@@ -1,4 +1,4 @@
-import { Receipt } from "@prisma/client";
+import { Category, Receipt } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { RecentReceipt } from "../server/service/receipt";
@@ -19,6 +19,7 @@ function mapToDashboardReceipts(receipts: RecentReceipt[]) {
 
 export function useRecentReceipts() {
   const [receipts, setReceipts] = useState<DashboardReceipt[]>([]);
+  const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +30,8 @@ export function useRecentReceipts() {
     setIsLoading(true);
     try {
       const receiptsData = await getRecentReceipts();
-      const receiptsFormatted = mapToDashboardReceipts(receiptsData)
+      const receiptsFormatted = mapToDashboardReceipts(receiptsData.recentReceipts)
+      setCategories(receiptsData.recentCategories)
       setReceipts(receiptsFormatted);
     } catch (error) {
       console.error(error);
@@ -39,5 +41,5 @@ export function useRecentReceipts() {
     }
   }
 
-  return { receipts, isLoading };
+  return { receipts, categories, isLoading };
 }

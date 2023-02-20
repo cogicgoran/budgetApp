@@ -1,3 +1,4 @@
+import { Category } from "@prisma/client";
 import { RecentReceiptQuery } from "../repository/receipt";
 
 export function buildRecentReceipts(recentReceipts: RecentReceiptQuery[]) {
@@ -13,6 +14,20 @@ export function buildRecentReceipts(recentReceipts: RecentReceiptQuery[]) {
       mostSpentCategory,
     };
   });
+}
+
+export function buildRecentCategories(recentReceipts: RecentReceiptQuery[]) {
+  const recentCategories = new Map<string, Category>();
+  recentReceipts.slice().reverse().forEach((receipt) => {
+    receipt.articles.some((article) => {
+      if(!recentCategories.has(article.category.name)) {
+        recentCategories.set(article.category.name, article.category);
+      }
+      if(recentCategories.size === 5) return true;
+      return false;
+    })
+  })
+  return Array.from(recentCategories.values());
 }
 
 export function getReceiptMostSpentCategory(receipt: RecentReceiptQuery) {

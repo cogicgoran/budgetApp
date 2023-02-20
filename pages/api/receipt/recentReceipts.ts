@@ -4,6 +4,7 @@ import {
   queryRecentReceipts,
 } from "../../../server/repository/receipt";
 import {
+  buildRecentCategories,
   buildRecentReceipts,
 } from "../../../server/service/receipt";
 
@@ -12,7 +13,8 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const receipts = await queryRecentReceipts(prisma);
       const recentReceipts = buildRecentReceipts(receipts);
-      return res.json(recentReceipts);
+      const recentCategories = buildRecentCategories(receipts);
+      return res.json({recentReceipts, recentCategories});
     } catch (error) {
       console.log(error);
       return res.status(500).send("Internal server error");
