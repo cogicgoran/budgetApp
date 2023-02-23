@@ -70,7 +70,6 @@ function ReceiptAddProduct(props: Props) {
   const formValues = watch();
 
   function onSubmit(values: AddArticleFormValues) {
-    console.log(values)
     props.onAddArticle({
       uuid: uuidv4(),
       name: values.name.trim(),

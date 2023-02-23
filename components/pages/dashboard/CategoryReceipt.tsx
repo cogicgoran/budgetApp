@@ -26,7 +26,7 @@ function CategoryReceipt({
       >
         {categoryName}
       </CategoryPill>
-      <span className="text-[#660000]">{categoryTotal} RSD</span>
+      <span className="text-[#660000]">{categoryTotal.toFixed(2)} RSD</span>
     </div>
   );
 }

@@ -20,11 +20,11 @@ function buildCurrentMonthReceiptsReport(
       total += article.unitPrice;
       const mappedValue = categoryMap.get(article.category.name);
       if (!mappedValue) {
-        categoryMap.set(article.category.name, article.unitPrice);
+        categoryMap.set(article.category.name, article.unitPrice * article.amount);
         categoryNameMap.set(article.category.name, article.category)
         return;
       }
-      categoryMap.set(article.category.name, mappedValue + article.unitPrice);
+      categoryMap.set(article.category.name, mappedValue + article.unitPrice * article.amount);
     });
   });
 

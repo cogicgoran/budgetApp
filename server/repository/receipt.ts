@@ -38,6 +38,7 @@ export async function queryCurrentMonthReceipts(prisma: PrismaClient) {
         select: {
           category: true,
           unitPrice: true,
+          amount: true
         },
       },
     },
