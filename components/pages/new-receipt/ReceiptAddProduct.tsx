@@ -24,6 +24,8 @@ const schema = z.object({
   price: z
     .number({ coerce: true, invalid_type_error: "Invalid price" })
     .positive({ message: "Price must be positive" }),
+  amount: z.number({ coerce: true, invalid_type_error: "Invalid price" })
+  .positive({ message: "Amount must be greater than 0" })
 });
 
 function getInitialFormValues() {
@@ -31,6 +33,7 @@ function getInitialFormValues() {
     name: "",
     category: null as string | null,
     price: "",
+    amount: 1
   };
 }
 
@@ -40,6 +43,7 @@ export interface FormDataArticle {
   uuid: string;
   name: string;
   price: number;
+  amount: number;
   category: { color: string; icon: string; id: number; name: string };
 }
 
@@ -61,10 +65,12 @@ function ReceiptAddProduct(props: Props) {
   const textCancel = t("cancel");
   const textName = t("name");
   const textPrice = t("price");
+  const textAmount = t("amount");
 
   const formValues = watch();
 
   function onSubmit(values: AddArticleFormValues) {
+    console.log(values)
     props.onAddArticle({
       uuid: uuidv4(),
       name: values.name.trim(),
@@ -72,6 +78,7 @@ function ReceiptAddProduct(props: Props) {
         (category) => category.id === Number(values.category!)
       )!,
       price: Number(values.price),
+      amount: Number(values.amount),
     });
 
     props.onCancel();
@@ -121,6 +128,14 @@ function ReceiptAddProduct(props: Props) {
             <label htmlFor="price">{textPrice}:</label>
             <input {...register("price")} placeholder={textPrice} />
           </div>
+          <div
+            className={classNames(styles.newProductInput, {
+              [styles.invalid]: errors.amount,
+            })}
+          >
+            <label htmlFor="amount">{textAmount}:</label>
+            <input {...register("amount")} placeholder={textAmount} />
+          </div>
           <div className={styles.newProductControls}>
             <Button
               type="button"
@@ -129,16 +144,6 @@ function ReceiptAddProduct(props: Props) {
             >
               {textCancel}
             </Button>
-            {/* <button
-              className={classNames(styles.newProductAddArticleBtn, {
-                [styles.disabled]: false,
-              })}
-              type="button"
-              disabled={false}
-              onClick={submitAction}
-            >
-              {textAdd}
-            </button> */}
             <Button actionType="success" type="button" onClick={submitAction}>
               {textAdd}
             </Button>

@@ -12,10 +12,10 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           date: new Date(payload.date),
           articles: {
             createMany: {
-              data: payload.articles.map((article: any) => ({
-                amount: 1,
+              data: payload.articles.map((article) => ({
+                amount: article.amount,
                 name: article.name,
-                unitPrice: article.price,
+                unitPrice: article.unitPrice,
                 categoryId: Number(article.category.id),
                 currencyId: Number(payload.currencyId),
               })),

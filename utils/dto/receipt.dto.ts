@@ -6,7 +6,10 @@ export const ReceiptDto = z.object({
     .array(
       z.object({
         name: z.string({ invalid_type_error: "Invalid article name" }),
-        price: z
+        amount: z
+          .number({ invalid_type_error: "Invalid article amount" })
+          .positive("Invalid article amount"),
+        unitPrice: z
           .number({ invalid_type_error: "Invalid article price" })
           .nonnegative("Invalid article price"),
         category: z.object(

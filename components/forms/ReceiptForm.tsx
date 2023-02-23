@@ -32,7 +32,7 @@ function ReceiptForm({}: Props) {
   const [articles, setArticles] = useState<FormDataArticle[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
-  const totalPrice = articles.reduce((acc, article) => acc + article.price, 0);
+  const totalPrice = articles.reduce((acc, article) => acc + article.price * article.amount, 0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const textAddProduct = t("addProduct");
@@ -58,7 +58,8 @@ function ReceiptForm({}: Props) {
       articles: data.articles.map((article) => ({
         name: article.name,
         category: { id: article.category.id },
-        price: article.price,
+        unitPrice: article.price,
+        amount: article.amount
       })),
     });
   }

@@ -19,6 +19,8 @@ function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,tota
   const textProductName = t("productName");
   const textCategory = t("category");
   const textPrice = t("price");
+  const textAmount = t("amount");
+  const textTotal = t("total");
 
   const currencyCode = currencies.find(currency => currency.id.toString() === selectedCurrencyId)?.code;
 
@@ -31,6 +33,8 @@ function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,tota
             <th>{textProductName}</th>
             <th>{textCategory}</th>
             <th>{textPrice}</th>
+            <th>{textAmount}</th>
+            <th>{textTotal}</th>
             <th></th>
           </tr>
         </thead>

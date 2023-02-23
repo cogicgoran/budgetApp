@@ -6,6 +6,7 @@ export const frenchDictionary: LanguageDictionary = {
   addNew: "Ajouter un Nouveau",
   addProduct: "Ajouter un Produit",
   alreadyHaveAnAccount: "Vous avez déjà un compte?",
+  amount: "Montant",
   cancel: "Annuler",
   categories: "Catégories",
   category: "Catégorie",

@@ -14,6 +14,7 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       const receipts = await queryRecentReceipts(prisma);
       const recentReceipts = buildRecentReceipts(receipts);
       const recentCategories = buildRecentCategories(receipts);
+      
       return res.json({recentReceipts, recentCategories});
     } catch (error) {
       console.log(error);

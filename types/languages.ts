@@ -4,6 +4,7 @@ export interface LanguageDictionary {
   addNew: string;
   addProduct: string;
   alreadyHaveAnAccount: string;
+  amount: string;
   cancel: string;
   categories: string;
   category: string;

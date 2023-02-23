@@ -6,6 +6,7 @@ export const englishDictionary: LanguageDictionary = {
   addNew: "Add New",
   addProduct: "Add Product",
   alreadyHaveAnAccount: "Already have an account?",
+  amount: "Amount",
   cancel: "Cancel",
   categories: "Categories",
   category: "Category",

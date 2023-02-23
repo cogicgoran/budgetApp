@@ -30,6 +30,12 @@ function ReceiptProduct({
       <td>
         {article.price.toFixed(2)} {currencyCode}
       </td>
+      <td>
+        {article.amount.toFixed(3)}
+      </td>
+      <td>
+        {(article.price * article.amount).toFixed(2)} {currencyCode}
+      </td>
       <td onClick={removeHandler}>
         <IconTrashCan />
       </td>
