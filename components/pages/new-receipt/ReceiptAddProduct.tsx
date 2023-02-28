@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./receiptAddProduct.module.scss";
 import classNames from "classnames";
@@ -53,11 +53,13 @@ function ReceiptAddProduct(props: Props) {
     formState: { errors },
     watch,
     handleSubmit,
+    setFocus
   } = useForm<AddArticleFormValues>({
     defaultValues: getInitialFormValues(),
     resolver: zodResolver(schema),
   });
   const { categories } = useNewReceiptContext();
+  const nameInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation();
   const textAdd = t("add");
   const textAddProduct = t("addProduct");
@@ -83,9 +85,11 @@ function ReceiptAddProduct(props: Props) {
     props.onCancel();
   }
 
-  function onInvalid(a: any) {
-    console.log("err", a);
-  }
+  useEffect(() => {
+    setFocus('name');
+  },[])
+
+  function onInvalid() {}
 
   const submitAction = handleSubmit(onSubmit, onInvalid);
 

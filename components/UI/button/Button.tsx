@@ -10,26 +10,28 @@ interface Props
   actionType: "success" | "info" | "fail" | "create";
 }
 
-function Button({ children, actionType, ...props }: Props) {
-  const isSuccessType = actionType === "success";
-  const isInfoType = actionType === "info";
-  const isFailType = actionType === "fail";
-  const isCreateType = actionType === "create"
-
-  return (
-    <button
-      {...props}
-      className={cn("border-1 border-solid rounded-xl", "px-4 py-[1px]", "text-xss uppercase", {
-        "text-white bg-success-primary border-success-secondary ":
-          isSuccessType,
-        "text-white bg-info-primary border-info-secondary": isInfoType,
-        "text-black bg-fail-primary border-fail-secondary": isFailType,
-        "text-create-secondary bg-create-primary border-create-secondary":isCreateType
-      })}
-    >
-      {children}
-    </button>
-  );
-}
+const Button = React.forwardRef<HTMLButtonElement,Props>(({ children, actionType, ...props }, ref) => {
+    const isSuccessType = actionType === "success";
+    const isInfoType = actionType === "info";
+    const isFailType = actionType === "fail";
+    const isCreateType = actionType === "create"
+  
+    return (
+      <button
+        {...props}
+        ref={ref}
+        className={cn("border-1 border-solid rounded-xl", "px-4 py-[1px]", "text-xss uppercase", {
+          "text-white bg-success-primary border-success-secondary ":
+            isSuccessType,
+          "text-white bg-info-primary border-info-secondary": isInfoType,
+          "text-black bg-fail-primary border-fail-secondary": isFailType,
+          "text-create-secondary bg-create-primary border-create-secondary":isCreateType
+        })}
+      >
+        {children}
+      </button>
+    );
+  }
+)
 
 export default Button;

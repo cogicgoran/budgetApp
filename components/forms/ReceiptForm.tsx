@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ReceiptInfo from "../pages/new-receipt/ReceiptInfo";
 import ReceiptProductList from "../pages/new-receipt/ReceiptProductList";
 import styles from "../pages/new-receipt/newReceipt.module.scss";
@@ -34,6 +34,7 @@ function ReceiptForm({}: Props) {
   const { t } = useTranslation();
   const totalPrice = articles.reduce((acc, article) => acc + article.price * article.amount, 0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const addProductRef = useRef<HTMLButtonElement>(null);
 
   const textAddProduct = t("addProduct");
   const textFinish = t("finish");
@@ -43,6 +44,7 @@ function ReceiptForm({}: Props) {
     setArticles((prevState) => {
       return [...prevState, article];
     });
+    addProductRef.current?.focus()
   }
 
   function createReceiptPayload(data: {
@@ -119,7 +121,7 @@ function ReceiptForm({}: Props) {
             />,
             document.getElementById("overlay-root")!
           )}
-        <Button type="button" actionType="create" onClick={() => setShowModal(true)}>
+        <Button ref={addProductRef} type="button" actionType="create" onClick={() => setShowModal(true)}>
           + {textAddProduct}
         </Button>
         <div className="text-center">

@@ -18,18 +18,13 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
 
   if (loading) {
-    console.log("LOADING AUTH");
     return <div>LOADING</div>;
   }
 
   if (error) {
-    console.log("ERROR");
     return <div>ERROR</div>;
   }
 
-  if (user) {
-    console.log("USER", user);
-  }
 
   return (
     <>
