@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import styles from "./receiptAddProduct.module.scss";
 import classNames from "classnames";
 import { useNewReceiptContext } from "../../../context/NewReceiptContext";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { uuidv4 } from "@firebase/util";
 import Button from "../../UI/button/Button";
+import NewProductInput from "../../forms/NewProductInput";
+import Select from 'react-select'
+import NewProductSelect from "../../forms/NewProductSelect";
 
 interface Props {
   onAddArticle: (article: FormDataArticle) => void;
@@ -24,8 +27,9 @@ const schema = z.object({
   price: z
     .number({ coerce: true, invalid_type_error: "Invalid price" })
     .positive({ message: "Price must be positive" }),
-  amount: z.number({ coerce: true, invalid_type_error: "Invalid price" })
-  .positive({ message: "Amount must be greater than 0" })
+  amount: z
+    .number({ coerce: true, invalid_type_error: "Invalid price" })
+    .positive({ message: "Amount must be greater than 0" }),
 });
 
 function getInitialFormValues() {
@@ -33,11 +37,11 @@ function getInitialFormValues() {
     name: "",
     category: null as string | null,
     price: "",
-    amount: 1
+    amount: 1,
   };
 }
 
-type AddArticleFormValues = ReturnType<typeof getInitialFormValues>;
+export type AddArticleFormValues = ReturnType<typeof getInitialFormValues>;
 
 export interface FormDataArticle {
   uuid: string;
@@ -48,18 +52,16 @@ export interface FormDataArticle {
 }
 
 function ReceiptAddProduct(props: Props) {
-  const {
-    register,
-    formState: { errors },
-    watch,
-    handleSubmit,
-    setFocus
-  } = useForm<AddArticleFormValues>({
+  const methods = useForm<AddArticleFormValues>({
     defaultValues: getInitialFormValues(),
     resolver: zodResolver(schema),
   });
+  const {
+    watch,
+    handleSubmit,
+    setFocus,
+  } = methods;
   const { categories } = useNewReceiptContext();
-  const nameInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation();
   const textAdd = t("add");
   const textAddProduct = t("addProduct");
@@ -86,8 +88,8 @@ function ReceiptAddProduct(props: Props) {
   }
 
   useEffect(() => {
-    setFocus('name');
-  },[])
+    setFocus("name");
+  }, []);
 
   function onInvalid() {}
 
@@ -97,61 +99,37 @@ function ReceiptAddProduct(props: Props) {
     <div className={styles.newProduct}>
       <div>
         <h4>{textAddProduct}</h4>
-        <form id="article-form" name="article-form" onSubmit={submitAction}>
-          <div
-            className={classNames(styles.newProductInput, {
-              [styles.invalid]: errors.name,
-            })}
-          >
-            <label htmlFor="name">{textName}:</label>
-            <input {...register("name")} placeholder={textName} />
-          </div>
-          <div
-            className={classNames(styles.newProductInput, {
-              [styles.invalid]: errors.category,
-            })}
-          >
-            <label htmlFor="category">{textCategory}:</label>
-            <select {...register("category")}>
-              <option selected value="" hidden>
-                {textCategory}
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            className={classNames(styles.newProductInput, {
-              [styles.invalid]: errors.price,
-            })}
-          >
-            <label htmlFor="price">{textPrice}:</label>
-            <input {...register("price")} placeholder={textPrice} />
-          </div>
-          <div
-            className={classNames(styles.newProductInput, {
-              [styles.invalid]: errors.amount,
-            })}
-          >
-            <label htmlFor="amount">{textAmount}:</label>
-            <input {...register("amount")} placeholder={textAmount} />
-          </div>
-          <div className={styles.newProductControls}>
-            <Button
-              type="button"
-              actionType="fail"
-              onClick={props.onCancel}
-            >
-              {textCancel}
-            </Button>
-            <Button actionType="success" type="button" onClick={submitAction}>
-              {textAdd}
-            </Button>
-          </div>
-        </form>
+        <FormProvider {...methods}>
+          <form id="article-form" name="article-form" onSubmit={submitAction}>
+            <NewProductInput
+              label={textName}
+              name="name"
+              key="name"
+            />
+            <NewProductInput
+              label={textPrice}
+              name="price"
+              key="price"
+            />
+            <NewProductSelect label={textCategory} name="category" key="category" options={categories.map((category) => ({
+              label: category.name,
+              value: category.id.toString()
+            }))} />
+            <NewProductInput
+              label={textAmount}
+              name="amount"
+              key="amount"
+            />
+            <div className={styles.newProductControls}>
+              <Button type="button" actionType="fail" onClick={props.onCancel}>
+                {textCancel}
+              </Button>
+              <Button actionType="success" type="button" onClick={submitAction}>
+                {textAdd}
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );
