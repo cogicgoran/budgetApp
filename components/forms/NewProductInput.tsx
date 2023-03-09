@@ -1,15 +1,5 @@
 import classNames from "classnames";
-import { Control, useFormContext } from "react-hook-form";
-import { AddArticleFormValues } from "../pages/new-receipt/ReceiptAddProduct";
-
-// display: grid;
-//   align-items: center;
-//   grid-template-columns: 14ch 30ch;
-//   column-gap: 2ch;
-//   margin-bottom: 0.2em;
-
-// padding: 0.1em 0.2em;
-//   border: 1px solid #90c3d0;
+import { useFormContext } from "react-hook-form";
 
 interface Props {
   name: string;
