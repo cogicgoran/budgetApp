@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import dayjs from "dayjs";
 
 export async function queryRecentReceipts(prisma: PrismaClient) {
   return await prisma.receipt.findMany({
@@ -23,6 +24,12 @@ export async function queryRecentReceipts(prisma: PrismaClient) {
         },
       },
     },
+    where: {
+      date: {
+        lte: dayjs().toISOString(),
+        gte: dayjs().subtract(90, "D").toISOString(),
+      },
+    },
     orderBy: {
       date: "desc",
     },
@@ -38,8 +45,14 @@ export async function queryCurrentMonthReceipts(prisma: PrismaClient) {
         select: {
           category: true,
           unitPrice: true,
-          amount: true
+          amount: true,
         },
+      },
+    },
+    where: {
+      date: {
+        lte: dayjs().toISOString(),
+        gte: dayjs().startOf("M").toISOString(),
       },
     },
   });

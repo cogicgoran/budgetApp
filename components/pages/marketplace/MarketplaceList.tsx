@@ -1,39 +1,45 @@
+import { Marketplace } from "@prisma/client";
 import React, { useMemo } from "react";
-import { useMarketplaces } from "../../../hooks/useMarketplaces";
 import MarketplaceItem from "./MarketplaceItem";
 import styles from "./marketplaceList.module.scss";
 
 interface Props {
-  onNoMarketplaces: any;
+  openAddMarketplaceModal: () => void;
+  marketplaces: Marketplace[];
+  isLoading: boolean;
 }
 
-function MarketplaceList(props: Props) {
-  const { marketplaces, isLoading } = useMarketplaces();
-
+function MarketplaceList({
+  isLoading,
+  marketplaces,
+  openAddMarketplaceModal,
+}: Props) {
   const display = useMemo(() => {
-    return marketplaces && marketplaces.length > 0 ? (
-      <table className={styles["marketplace-list__table"]}>
-        <thead>
-          <th>id</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th></th>
-        </thead>
-        <tbody>
-          {marketplaces.map((marketplace: any) => (
-            <MarketplaceItem key={marketplace.id} marketplace={marketplace} />
-          ))}
-        </tbody>
-      </table>
-    ) : (
+    if (marketplaces && marketplaces.length > 0) {
+      return (
+        <table className={styles["marketplace-list__table"]}>
+          <thead>
+            <th>Name</th>
+            <th>Address</th>
+            <th></th>
+          </thead>
+          <tbody>
+            {marketplaces.map((marketplace: any) => (
+              <MarketplaceItem key={marketplace.id} marketplace={marketplace} />
+            ))}
+          </tbody>
+        </table>
+      );
+    }
+    return (
       <div>
         No Marketplaces found. You can add one{" "}
-        <button onClick={props.onNoMarketplaces}>
+        <button onClick={openAddMarketplaceModal}>
           <i>here</i>
         </button>
       </div>
     );
-  }, [marketplaces, props.onNoMarketplaces]);
+  }, [marketplaces]);
 
   return (
     <div>

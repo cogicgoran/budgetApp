@@ -1,93 +1,77 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { PATHS } from "../../../utils/constants";
+import NewProductInput from "../../forms/NewProductInput";
 import styles from "./newMarketplace.module.scss";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
+import { getResponseErrorMessage } from "../../../utils/function/common";
+import { createNewMarketplace } from "../../../utils/function/api/marketplace";
+import { Marketplace } from "@prisma/client";
 
 interface Props {
-  onCancel: any;
+  onCancel: () => void;
+  onSuccess: (marketplace: Marketplace) => void;
 }
 
-const DEFAULT_MARKETPLACE = { name: "", address: "" };
+const addMarketplaceSchema = z.object({
+  name: z.string(),
+  address: z.string(),
+});
 
-function NewMarketplace(props: Props) {
+export type AddMarketplacePayload = ReturnType<
+  typeof addMarketplaceSchema["parse"]
+>;
+
+const DEFAULT_MARKETPLACE: AddMarketplacePayload = { name: "", address: "" };
+
+function NewMarketplace({onCancel,onSuccess}: Props) {
   const [shop, setShop] = useState(DEFAULT_MARKETPLACE);
+  const formMethods = useForm({
+    defaultValues: {
+      name: "",
+      address: "",
+    },
+    resolver: zodResolver(addMarketplaceSchema),
+  });
   const router = useRouter();
 
-  function changeHandler(e: any) {
-    setShop((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      };
-    });
-  }
-
-  async function submitHandler(event: any) {
-    event.preventDefault();
-    if (
-      shop.name &&
-      shop.name.length > 0 &&
-      shop.address &&
-      shop.address.length > 0
-    ) {
-      const shopData = { name: shop.name, address: shop.address };
-      try {
-        await fetch("http://localhost:8000/api/marketplaces", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(shopData),
-        });
-        router.push(PATHS.HOME);
-      } catch (error: any) {
-        // alert(error.message);
-      }
+  async function submitHandler(payload: AddMarketplacePayload) {
+    try {
+      const marketplace = await createNewMarketplace(payload);
+      toast.success("Marketplace added")
+      onSuccess(marketplace);
+    } catch (error) {
+      toast.error(getResponseErrorMessage(error));
     }
   }
 
   return (
-    <div className={styles["new-marketplace"]}>
+    <div>
       <h3>NEW MARKETPLACE</h3>
-      <form onSubmit={submitHandler}>
-        <div className={styles["new-marketplace-input"]}>
-          <label htmlFor="shop_name">Shop name:</label>
-          <input
-            type="text"
-            id="shop_name"
-            name="name"
-            placeholder="Name..."
-            value={shop.name}
-            onChange={changeHandler}
-          />
-        </div>
-        <div className={styles["new-marketplace-input"]}>
-          <label htmlFor="shop_address">Shop address:</label>
-          <input
-            type="text"
-            id="shop_address"
-            name="address"
-            placeholder="Address..."
-            value={shop.address}
-            onChange={changeHandler}
-          />
-        </div>
-        <div className={styles["new-marketplace__controls"]}>
-          <button
-            className={styles["new-marketplace__cancel-btn"]}
-            type="button"
-            onClick={props.onCancel}
-          >
-            CANCEL
-          </button>
-          <button
-            type="submit"
-            className={styles["new-marketplace__confirm-btn"]}
-          >
-            CONFIRM
-          </button>
-        </div>
-      </form>
+      <FormProvider {...formMethods}>
+        <form onSubmit={formMethods.handleSubmit(submitHandler)}>
+          <NewProductInput name="name" label="Shop name" />
+          <NewProductInput name="address" label="Address" />
+          <div className={styles["new-marketplace__controls"]}>
+            <button
+              className={styles["new-marketplace__cancel-btn"]}
+              type="button"
+              onClick={onCancel}
+            >
+              CANCEL
+            </button>
+            <button
+              type="submit"
+              className={styles["new-marketplace__confirm-btn"]}
+            >
+              CONFIRM
+            </button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 }

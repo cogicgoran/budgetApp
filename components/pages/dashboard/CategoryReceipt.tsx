@@ -3,6 +3,7 @@ import React from "react";
 import { getColorSchemeByMainColor } from "../../../utils/common";
 import CategoryPill from "../../UI/category-pill/CategoryPill";
 import styles from "./dashboardMonthly.module.scss";
+import { formatCurrencyNumberText } from "./Receipt";
 
 interface Props {
   categoryName: string;
@@ -26,7 +27,7 @@ function CategoryReceipt({
       >
         {categoryName}
       </CategoryPill>
-      <span className="text-[#660000]">{categoryTotal.toFixed(2)} RSD</span>
+      <span className="text-[#660000]">{formatCurrencyNumberText(categoryTotal, "RSD")} RSD</span>
     </div>
   );
 }

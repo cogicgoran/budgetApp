@@ -4,13 +4,34 @@ import ReactDOM from "react-dom";
 import MarketplaceList from "../components/pages/marketplace/MarketplaceList";
 import Backdrop from "../components/UI/backdrop/Backdrop";
 import NewMarketplace from "../components/pages/marketplace/NewMarketplace";
+import Modal from "../components/UI/modal/Modal";
+import { Marketplace } from "@prisma/client";
+import { useMarketplaces } from "../hooks/useMarketplaces";
 
 function MarketplacePage() {
   const [showModal, setShowModal] = useState(false);
+  const { marketplaces, isLoading, prependNewMarketplace } = useMarketplaces();
+
+  function handleSuccess(newMarketplace: Marketplace) {
+    prependNewMarketplace(newMarketplace);
+    setShowModal(false);
+  }
 
   return (
     <div className={styles.marketplaces}>
-      <MarketplaceList onNoMarketplaces={() => setShowModal(true)} />
+      <button
+        className={styles["new-marketplace__show-btn"]}
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
+        + ADD MARKETPLACE
+      </button>
+      <MarketplaceList
+        marketplaces={marketplaces}
+        isLoading={isLoading}
+        openAddMarketplaceModal={() => setShowModal(true)}
+      />
       <button
         className={styles["new-marketplace__show-btn"]}
         onClick={() => {
@@ -26,7 +47,12 @@ function MarketplacePage() {
         )}
       {showModal &&
         ReactDOM.createPortal(
-          <NewMarketplace onCancel={() => setShowModal(false)} />,
+          <Modal>
+            <NewMarketplace
+              onCancel={() => setShowModal(false)}
+              onSuccess={handleSuccess}
+            />
+          </Modal>,
           document.getElementById("overlay-root")!
         )}
     </div>

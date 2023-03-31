@@ -25,5 +25,12 @@ export function useMarketplaces() {
     }
   }
 
-  return { marketplaces, isLoading };
+  function prependNewMarketplace(marketplace: Marketplace) {
+    setMarketplaces((previousMarketplaces) => [
+      marketplace,
+      ...previousMarketplaces,
+    ]);
+  }
+
+  return { marketplaces, isLoading, prependNewMarketplace };
 }

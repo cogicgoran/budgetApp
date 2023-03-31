@@ -3,6 +3,7 @@ import styles from "./dashboardMonthly.module.scss";
 import { Trans } from "react-i18next";
 import CategoryReceipt from "./CategoryReceipt";
 import { useMonthlyReport } from "../../../hooks/useMonthlyReport";
+import { formatCurrencyNumberText } from "./Receipt";
 
 function DashboardMonthly() {
   const { monthlyReport, isLoading } = useMonthlyReport();
@@ -21,7 +22,7 @@ function DashboardMonthly() {
         <>
           <div className={styles.dashboardCurrentMonthTotal}>
             <span>
-              {monthlyReport.total} <br /> {monthlyReport.currency}
+              {formatCurrencyNumberText(monthlyReport.total, monthlyReport.currency)} <br /> {monthlyReport.currency}
             </span>
           </div>
           <div className={styles.dashboardCurrentMonthCategories}>

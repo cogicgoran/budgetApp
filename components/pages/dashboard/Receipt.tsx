@@ -13,14 +13,15 @@ import { getColorSchemeByMainColor } from "../../../utils/common";
 
 const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function formatCurrencyNumberText(price: number, code: string) {
+export function formatCurrencyNumberText(price: number, code: string) {
   return Intl.NumberFormat("en-US", {
     style: "currency",
     currency: code,
     currencyDisplay: "code",
   })
     .format(price)
-    .replace(code, "");
+    .replace(code, "")
+    .trim();
 }
 
 function Receipt(props: DashboardReceipt) {
@@ -36,7 +37,10 @@ function Receipt(props: DashboardReceipt) {
         styles.dashboardReceipt
       )}
     >
-      <CategoryPill  iconName={props.mostSpentCategory.icon} mainColor={props.mostSpentCategory.color} >
+      <CategoryPill
+        iconName={props.mostSpentCategory.icon}
+        mainColor={props.mostSpentCategory.color}
+      >
         {props.mostSpentCategory.name}
       </CategoryPill>
       <div>{props.shopName}</div>

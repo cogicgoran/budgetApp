@@ -17,24 +17,32 @@ import { PATHS } from "../../utils/constants";
 import { Category } from "@prisma/client";
 import { ReceiptDto } from "../../utils/dto/receipt.dto";
 import Button from "../UI/button/Button";
+import { FormProvider, useForm } from "react-hook-form";
 
 interface Props {}
 
-const DEFAULT_RECEIPT_INFO = {
+const initialReceiptFormValue = {
   marketplace: "",
   date: "",
   currency: "",
+  articles: [],
 };
 
 function ReceiptForm({}: Props) {
-  const [receiptInfo, setReceiptInfo] = useState(DEFAULT_RECEIPT_INFO);
   const [showModal, setShowModal] = useState(false);
   const [articles, setArticles] = useState<FormDataArticle[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
-  const totalPrice = articles.reduce((acc, article) => acc + article.price * article.amount, 0);
+  const totalPrice = articles.reduce(
+    (acc, article) => acc + article.price * article.amount,
+    0
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addProductRef = useRef<HTMLButtonElement>(null);
+
+  const formMethods = useForm({
+    defaultValues: initialReceiptFormValue,
+  });
 
   const textAddProduct = t("addProduct");
   const textFinish = t("finish");
@@ -44,7 +52,7 @@ function ReceiptForm({}: Props) {
     setArticles((prevState) => {
       return [...prevState, article];
     });
-    addProductRef.current?.focus()
+    addProductRef.current?.focus();
   }
 
   function createReceiptPayload(data: {
@@ -61,7 +69,7 @@ function ReceiptForm({}: Props) {
         name: article.name,
         category: { id: article.category.id },
         unitPrice: article.price,
-        amount: article.amount
+        amount: article.amount,
       })),
     });
   }
@@ -97,39 +105,45 @@ function ReceiptForm({}: Props) {
 
   return (
     <div>
-      <form
-        className={styles["new-receipt-content-wrapper"]}
-        onSubmit={submitHandler}
-      >
-        <ReceiptInfo value={receiptInfo} onChangeValue={setReceiptInfo} />
-        <ReceiptProductList
-          onRemoveArticle={removeArticle}
-          articleList={articles}
-          total={totalPrice}
-          selectedCurrencyId={receiptInfo.currency}
-        />
-        {showModal &&
-          createPortal(
-            <Backdrop onCancel={() => setShowModal(false)} />,
-            document.getElementById("backdrop-root")!
-          )}
-        {showModal &&
-          createPortal(
-            <ReceiptAddProduct
-              onAddArticle={addArticleHandler}
-              onCancel={() => setShowModal(false)}
-            />,
-            document.getElementById("overlay-root")!
-          )}
-        <Button ref={addProductRef} type="button" actionType="create" onClick={() => setShowModal(true)}>
-          + {textAddProduct}
-        </Button>
-        <div className="text-center">
-          <Button type="submit" actionType="success" disabled={isSubmitting}>
-            {textFinish}
+      <FormProvider {...formMethods}>
+        <form
+          onSubmit={submitHandler}
+        >
+          <ReceiptInfo />
+          <ReceiptProductList
+            onRemoveArticle={removeArticle}
+            articleList={articles}
+            total={totalPrice}
+            selectedCurrencyId={formMethods.getValues("currency")}
+          />
+          {showModal &&
+            createPortal(
+              <Backdrop onCancel={() => setShowModal(false)} />,
+              document.getElementById("backdrop-root")!
+            )}
+          {showModal &&
+            createPortal(
+              <ReceiptAddProduct
+                onAddArticle={addArticleHandler}
+                onCancel={() => setShowModal(false)}
+              />,
+              document.getElementById("overlay-root")!
+            )}
+          <Button
+            ref={addProductRef}
+            type="button"
+            actionType="create"
+            onClick={() => setShowModal(true)}
+          >
+            + {textAddProduct}
           </Button>
-        </div>
-      </form>
+          <div className="text-center">
+            <Button type="submit" actionType="success" disabled={isSubmitting}>
+              {textFinish}
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 }

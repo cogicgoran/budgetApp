@@ -23,22 +23,27 @@ export function isReceiptInfoValid(info: any) {
   return false;
 }
 
-
 const NewReceiptPage: NextPage = () => {
   const { t } = useTranslation();
-  const {categories} = useCategories()
+  const { categories } = useCategories();
   const { marketplaces } = useMarketplaces();
   const { currencies } = useCurrencies();
   const textNewReceipt = t("newReceipt");
 
+  const contextValue = {
+    categories,
+    marketplaces,
+    currencies,
+  }
+
   return (
-    <NewReceiptContext.Provider value={{
-      categories, marketplaces, currencies
-    }}>
+    <NewReceiptContext.Provider
+      value={contextValue}
+    >
       <div className={styles["new-receipt"]}>
-      <h3>{textNewReceipt}</h3>
-      <ReceiptForm />
-    </div>
+        <h3>{textNewReceipt}</h3>
+        <ReceiptForm />
+      </div>
     </NewReceiptContext.Provider>
   );
 };
