@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { CSSProperties } from "react";
 import { getColorSchemeByMainColor, getIconByName } from "../../../utils/common";
 import styles from "./categoryPill.module.scss";
 

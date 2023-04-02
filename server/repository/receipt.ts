@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
 
 export async function queryRecentReceipts(prisma: PrismaClient) {
@@ -24,12 +24,12 @@ export async function queryRecentReceipts(prisma: PrismaClient) {
         },
       },
     },
-    where: {
-      date: {
-        lte: dayjs().toISOString(),
-        gte: dayjs().subtract(90, "D").toISOString(),
-      },
-    },
+    // where: {
+    //   date: {
+    //     lte: dayjs().toISOString(),
+    //     gte: dayjs().subtract(90, "D").toISOString(),
+    //   },
+    // },
     orderBy: {
       date: "desc",
     },
@@ -58,7 +58,33 @@ export async function queryCurrentMonthReceipts(prisma: PrismaClient) {
   });
 }
 
-export type RecentReceiptQuery = Awaited<
+export async function queryReceiptsView(prisma: PrismaClient) {
+  return await prisma.receipt.findMany({
+    select: {
+      id: true,
+      date: true,
+      marketplace: {
+        select: {
+          address: true,
+        },
+      },
+      currency: {
+        select: {
+          code: true,
+        },
+      },
+      articles: {
+        select: {
+          unitPrice: true,
+          amount: true,
+          category: true,
+        },
+      },
+    },
+  });
+}
+
+export type ReceiptQueryResultItem = Awaited<
   ReturnType<typeof queryRecentReceipts>
 >[number];
 

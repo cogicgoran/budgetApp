@@ -1,6 +1,7 @@
 import { Category } from "@prisma/client";
 import axios from "axios";
 import { RecentReceipt } from "../../../server/service/receipt";
+import { ReceiptQueryResultItem } from "../../../server/repository/receipt";
 
 export async function getMonthlyReport(): Promise<{
   currency: string;
@@ -15,7 +16,18 @@ export async function getMonthlyReport(): Promise<{
   return response.data;
 }
 
-export async function getRecentReceipts(): Promise<{recentReceipts:RecentReceipt[], recentCategories: Category[]}> {
+export async function getReceiptsView(): Promise<{
+  items: ReceiptQueryResultItem[];
+}> {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/view`;
+  const response = await axios.get(url);
+  return response.data;
+}
+
+export async function getRecentReceipts(): Promise<{
+  recentReceipts: RecentReceipt[];
+  recentCategories: Category[];
+}> {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/recentReceipts`;
   const response = await axios.get(url);
   return response.data;
@@ -27,4 +39,4 @@ export async function createReceipt(payload: any) {
   return response.data;
 }
 
-export type MonthlyReport = Awaited<ReturnType<typeof getMonthlyReport>>
+export type MonthlyReport = Awaited<ReturnType<typeof getMonthlyReport>>;

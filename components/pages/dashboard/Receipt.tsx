@@ -11,7 +11,7 @@ import { DashboardReceipt } from "../../../hooks/useRecentReceipts";
 import CategoryPill from "../../UI/category-pill/CategoryPill";
 import { getColorSchemeByMainColor } from "../../../utils/common";
 
-const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+export const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function formatCurrencyNumberText(price: number, code: string) {
   return Intl.NumberFormat("en-US", {

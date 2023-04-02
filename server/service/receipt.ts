@@ -1,7 +1,7 @@
 import { Category } from "@prisma/client";
-import { RecentReceiptQuery } from "../repository/receipt";
+import { ReceiptQueryResultItem } from "../repository/receipt";
 
-export function buildRecentReceipts(recentReceipts: RecentReceiptQuery[]) {
+export function buildReceiptsReport(recentReceipts: ReceiptQueryResultItem[]) {
   return recentReceipts.map((receipt) => {
     const total = receipt.articles.reduce(
       (total, article) => total + article.amount * article.unitPrice,
@@ -16,7 +16,7 @@ export function buildRecentReceipts(recentReceipts: RecentReceiptQuery[]) {
   });
 }
 
-export function buildRecentCategories(recentReceipts: RecentReceiptQuery[]) {
+export function buildRecentCategories(recentReceipts: ReceiptQueryResultItem[]) {
   const recentCategories = new Map<string, Category>();
   recentReceipts.slice().reverse().forEach((receipt) => {
     receipt.articles.some((article) => {
@@ -30,7 +30,7 @@ export function buildRecentCategories(recentReceipts: RecentReceiptQuery[]) {
   return Array.from(recentCategories.values());
 }
 
-export function getReceiptMostSpentCategory(receipt: RecentReceiptQuery) {
+export function getReceiptMostSpentCategory(receipt: ReceiptQueryResultItem) {
   const categoryPrices = new Map();
   receipt.articles.forEach((article) => {
     categoryPrices.set(
@@ -50,4 +50,4 @@ export function getReceiptMostSpentCategory(receipt: RecentReceiptQuery) {
     .category;
 }
 
-export type RecentReceipt = ReturnType<typeof buildRecentReceipts>[number];
+export type RecentReceipt = ReturnType<typeof buildReceiptsReport>[number];
