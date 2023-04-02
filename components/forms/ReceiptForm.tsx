@@ -25,18 +25,14 @@ const initialReceiptFormValue = {
   marketplace: "",
   date: "",
   currency: "",
-  articles: [],
+  articles: [] as FormDataArticle[],
 };
 
 function ReceiptForm({}: Props) {
   const [showModal, setShowModal] = useState(false);
-  const [articles, setArticles] = useState<FormDataArticle[]>([]);
   const router = useRouter();
   const { t } = useTranslation();
-  const totalPrice = articles.reduce(
-    (acc, article) => acc + article.price * article.amount,
-    0
-  );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addProductRef = useRef<HTMLButtonElement>(null);
 
@@ -44,14 +40,21 @@ function ReceiptForm({}: Props) {
     defaultValues: initialReceiptFormValue,
   });
 
+  const articles = formMethods.watch("articles");
+  const totalPrice = articles.reduce(
+    (acc, article) => acc + article.price * article.amount,
+    0
+  );
+
   const textAddProduct = t("addProduct");
   const textFinish = t("finish");
   const textNewReceipt = t("newReceipt");
 
   function addArticleHandler(article: FormDataArticle) {
-    setArticles((prevState) => {
-      return [...prevState, article];
-    });
+    formMethods.setValue("articles", [
+      ...formMethods.getValues().articles,
+      article,
+    ]);
     addProductRef.current?.focus();
   }
 
@@ -74,19 +77,14 @@ function ReceiptForm({}: Props) {
     });
   }
 
-  async function submitHandler(e: any) {
-    e.preventDefault();
-    if (!(isReceiptInfoValid(receiptInfo) && articles.length > 0)) {
-      toast.error("Invalid receipt");
-      return;
-    }
+  async function submitHandler(formData: typeof initialReceiptFormValue) {
     setIsSubmitting(true);
     try {
       const payload = createReceiptPayload({
-        marketplace: receiptInfo.marketplace,
-        date: new Date(receiptInfo.date),
-        currency: receiptInfo.currency,
-        articles: articles,
+        marketplace: formData.marketplace,
+        date: new Date(formData.date),
+        currency: formData.currency,
+        articles: formData.articles,
       });
 
       await createReceipt(payload);
@@ -100,19 +98,21 @@ function ReceiptForm({}: Props) {
   }
 
   function removeArticle(uuid: string) {
-    setArticles(articles.filter((article) => article.uuid !== uuid));
+    const currentArticles = formMethods.getValues().articles;
+    formMethods.setValue(
+      "articles",
+      currentArticles.filter((article) => article.uuid !== uuid)
+    );
   }
 
   return (
     <div>
       <FormProvider {...formMethods}>
-        <form
-          onSubmit={submitHandler}
-        >
+        <form onSubmit={formMethods.handleSubmit(submitHandler)}>
           <ReceiptInfo />
           <ReceiptProductList
             onRemoveArticle={removeArticle}
-            articleList={articles}
+            articleList={formMethods.getValues().articles}
             total={totalPrice}
             selectedCurrencyId={formMethods.getValues("currency")}
           />

@@ -20,7 +20,7 @@ function ViewReceiptsPage() {
   const [receipts, setReceipts] = useState<ReceiptQueryResultItem[]>([]);
   const [modalReceiptId, setModalReceiptId] = useState<number>();
 
-  console.log(modalReceiptId)
+  console.log(modalReceiptId);
 
   function showReceipt(receiptId: number) {
     setModalReceiptId(receiptId);
@@ -42,17 +42,17 @@ function ViewReceiptsPage() {
   }, []);
 
   function getCellClassname(cellId: string) {
-    if(cellId === "category") return classNames("w-[128px]")
-    if(cellId === "date") return classNames("w-[128px]")
-    if(cellId === "icons") return classNames("w-[128px]")
-    if(cellId === "total") return classNames("w-[128px]")
+    if (cellId === "category") return classNames("w-[128px]");
+    if (cellId === "date") return classNames("w-[128px]");
+    if (cellId === "icons") return classNames("w-[128px]");
+    if (cellId === "total") return classNames("w-[128px]");
     return "";
   }
 
   const columns = useMemo(() => {
     return [
       {
-        id:"category",
+        id: "category",
         Header: "Category",
         accessor: (receipt) => receipt,
         Cell: ({ cell: { value } }) => {
@@ -71,7 +71,7 @@ function ViewReceiptsPage() {
         accessor: (receipt) => receipt.marketplace.address,
       },
       {
-        id:"date",
+        id: "date",
         Header: "Date",
         accessor: "date",
         Cell: ({ cell: { value } }) => (
@@ -86,7 +86,7 @@ function ViewReceiptsPage() {
         ),
       },
       {
-        id:"total",
+        id: "total",
         Header: "Total",
         accessor: (receipt) => receipt,
         Cell: ({ cell: { value } }) => {
@@ -97,7 +97,6 @@ function ViewReceiptsPage() {
             </div>
           );
         },
-
       },
       {
         id: "icons",
@@ -106,14 +105,14 @@ function ViewReceiptsPage() {
           return (
             <div className={classNames("flex justify-end items-center")}>
               <span
-              onClick={() => showReceipt(value.id)}
-                  className={classNames(
-                    "p-[6px]",
-                    "transition-colors cursor-pointer rounded-[50%]",
-                    "hover:bg-[#90c3d0] hover:text-[grey]"
-                  )}
-                >
-                  <IconEye className={classNames("w-[20px] h-[20px]")} />
+                onClick={() => showReceipt(value.id)}
+                className={classNames(
+                  "p-[6px]",
+                  "transition-colors cursor-pointer rounded-[50%]",
+                  "hover:bg-[#90c3d0] hover:text-[grey]"
+                )}
+              >
+                <IconEye className={classNames("w-[20px] h-[20px]")} />
               </span>
               <Link href={PATHS.EDIT_RECEIPTS + "/" + value.id}>
                 <a
@@ -152,26 +151,38 @@ function ViewReceiptsPage() {
     });
   return (
     <div>
-      <table {...getTableProps({className:classNames("border-spacing-[4px] border-separate")})}>
+      <table
+        {...getTableProps({
+          className: classNames("border-spacing-[4px] border-separate"),
+        })}
+      >
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps({className:classNames("text-left")})}>
+            <tr
+              {...headerGroup.getHeaderGroupProps({
+                className: classNames("text-left"),
+              })}
+            >
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()}>{column.render("Header")}</th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps({className:classNames("text-xs")})}>
+        <tbody {...getTableBodyProps({ className: classNames("text-xs") })}>
           {rows.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps({
-                      className: getCellClassname(cell.column.id)
-                    })}>{cell.render("Cell")}</td>
+                    <td
+                      {...cell.getCellProps({
+                        className: getCellClassname(cell.column.id),
+                      })}
+                    >
+                      {cell.render("Cell")}
+                    </td>
                   );
                 })}
               </tr>
@@ -179,12 +190,11 @@ function ViewReceiptsPage() {
           })}
         </tbody>
       </table>
-      {
-        modalReceiptId !== undefined &&
+      {modalReceiptId !== undefined && (
         <Modal open={true} onCancel={closeReceiptModal}>
           {modalReceiptId}
         </Modal>
-      }
+      )}
     </div>
   );
 }
