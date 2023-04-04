@@ -1,20 +1,16 @@
 import { useRef, useState } from "react";
 import ReceiptInfo from "../pages/new-receipt/ReceiptInfo";
 import ReceiptProductList from "../pages/new-receipt/ReceiptProductList";
-import styles from "../pages/new-receipt/newReceipt.module.scss";
 import Backdrop from "../UI/backdrop/Backdrop";
 import ReceiptAddProduct, {
   FormDataArticle,
 } from "../pages/new-receipt/ReceiptAddProduct";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { isReceiptInfoValid } from "../../pages/new-receipt";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { createReceipt } from "../../utils/function/api/receipt";
 import { useRouter } from "next/router";
 import { PATHS } from "../../utils/constants";
-import { Category } from "@prisma/client";
 import { ReceiptDto } from "../../utils/dto/receipt.dto";
 import Button from "../UI/button/Button";
 import { FormProvider, useForm } from "react-hook-form";
