@@ -25,7 +25,7 @@ function RecentReceipts({ isLoading, receipts }: Props) {
     <div className={styles.dashboardRecent}>
       <h2>{textRecentReceipts}</h2>
       <div>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <p data-testid="loading" >Loading...</p>}
         {!isLoading &&
           receipts.length > 0 &&
           receipts.map((receipt) => {

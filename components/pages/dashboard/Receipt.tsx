@@ -52,7 +52,7 @@ function Receipt(props: DashboardReceipt) {
           year: "numeric",
         })}
       </div>
-      <div className="text-[#660000] text-left">
+      <div data-testid="priceCurrency" className="text-[#660000] text-left">
         {formatCurrencyNumberText(props.price, props.currency)} {props.currency}
       </div>
       <div className={styles.dashboardReceiptActions}>
