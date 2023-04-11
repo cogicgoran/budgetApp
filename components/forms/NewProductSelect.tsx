@@ -39,7 +39,7 @@ function NewProductSelect({ name, label, options }: Props) {
       >
         {label}:
       </label>
-      <Select<Option> // TODO: Find a better way to style select
+      <Select<Option>
         {...register(name)}
         options={options}
         onChange={(option) => {
@@ -55,9 +55,15 @@ function NewProductSelect({ name, label, options }: Props) {
           control(base) {
             return {
               ...base,
-              minHeight: "unset",
-              borderRadius: "unset",
-              borderColor: errors[name] ? "f00" : "#90c3d0",
+              outline: undefined,
+              minHeight: undefined,
+              borderRadius: undefined,
+              borderColor: undefined,
+              backgroundColor: undefined,
+              boxShadow: undefined,
+              "&:hover": {
+                borderColor: undefined
+              }
             };
           },
           valueContainer(base) {
@@ -80,8 +86,11 @@ function NewProductSelect({ name, label, options }: Props) {
           },
         }}
         classNames={{
-          control() {
-            return "border-[#ff0000]";
+          control({ isFocused }) {
+            return classNames("border-[#90c3d0] bg-[#f5fdff]", {
+              "rounded-sm outline-[#90c3d0] outline-offset-[-1px] outline outline-2": isFocused,
+              "border-[#f00]": !!errors[name],
+            });
           },
         }}
       />

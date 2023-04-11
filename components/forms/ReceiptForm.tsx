@@ -110,7 +110,6 @@ function ReceiptForm({}: Props) {
             onRemoveArticle={removeArticle}
             articleList={formMethods.getValues().articles}
             total={totalPrice}
-            selectedCurrencyId={formMethods.getValues("currency")}
           />
           {showModal &&
             createPortal(

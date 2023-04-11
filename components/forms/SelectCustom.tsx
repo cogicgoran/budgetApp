@@ -24,7 +24,7 @@ function SelectCustom({ name, options }: Props) {
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
-      <Select<Option> // TODO: Find a better way to style select
+      <Select<Option>
         {...register(name)}
         options={options}
         onChange={(option) => {

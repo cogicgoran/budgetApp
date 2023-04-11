@@ -13,12 +13,12 @@ module.exports = {
         "info-secondary": "#314354",
         "fail-primary": "#fad9d5",
         "fail-secondary": "#ae4132",
-        "create-primary":"#b1ddf0",
-        "create-secondary":"#10739e"
+        "create-primary": "#b1ddf0",
+        "create-secondary": "#10739e",
       },
       fontSize: {
-        xss:"11px"
-      }
+        xss: "11px",
+      },
     },
   },
   plugins: [],

@@ -5,16 +5,18 @@ import ReceiptProduct from "./ReceiptProduct";
 import { Article } from "@prisma/client";
 import { FormDataArticle } from "./ReceiptAddProduct";
 import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { useFormContext } from "react-hook-form";
 
 interface Props {
   onRemoveArticle: (id: string) => void;
-  selectedCurrencyId: string;
   total: any;
   articleList: FormDataArticle[];
 }
 
-function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,total}: Props) {
-  const {currencies} = useNewReceiptContext()
+function ReceiptProductList({ articleList, onRemoveArticle, total }: Props) {
+  const { currencies } = useNewReceiptContext();
+  const { watch } = useFormContext();
+  const selectedCurrencyId = watch("currency");
   const { t } = useTranslation();
   const textProductName = t("productName");
   const textCategory = t("category");
@@ -22,8 +24,9 @@ function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,tota
   const textAmount = t("amount");
   const textTotal = t("total");
 
-  const currencyCode = currencies.find(currency => currency.id.toString() === selectedCurrencyId)?.code;
-
+  const currencyCode = currencies.find(
+    (currency) => currency.id == selectedCurrencyId
+  )?.code;
 
   return (
     <div>
@@ -45,7 +48,7 @@ function ReceiptProductList({articleList,selectedCurrencyId,onRemoveArticle,tota
                 key={article.uuid}
                 onRemoveArticle={onRemoveArticle}
                 article={article}
-                currencyId={selectedCurrencyId}
+                currency={currencyCode}
               />
             );
           })}
