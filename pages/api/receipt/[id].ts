@@ -15,8 +15,21 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         },
         select: {
-          articles: true,
-          currency: true,
+          articles: {
+            select: {
+              id: true,
+              amount: true,
+              category: true,
+              name: true,
+              unitPrice: true,
+            },
+          },
+          currency: {
+            select: {
+              id: true,
+              code: true,
+            },
+          },
           date: true,
           marketplace: true,
           id: true,
@@ -27,7 +40,7 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         receipt: receipt ?? null,
       });
     } catch (error) {
-        console.log(error)
+      console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   } else if (req.method === "PUT") {
@@ -46,39 +59,42 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         }),
         prisma.article.deleteMany({
-            where: {
-                receiptId: {
-                    equals: receiptId
-                },
-                id: {
-                    notIn: payload.articles.filter((article) => !!article.id).map((article) => article.id as number)
-                }
-            }
+          where: {
+            receiptId: {
+              equals: receiptId,
+            },
+            id: {
+              notIn: payload.articles
+                .filter((article) => !!article.id)
+                .map((article) => article.id as number),
+            },
+          },
         }),
         ...payload.articles.map((article) => {
-            return prisma.article.upsert({
-                create: {
-                    amount: article.amount,
-                    name: article.name,
-                    unitPrice: article.unitPrice,
-                    categoryId: article.category,
-                    currencyId: payload.currencyId,
-                    receiptId: receiptId
-                }, update: {
-                    amount: article.amount,
-                    name: article.name,
-                    unitPrice: article.unitPrice,
-                    categoryId: article.category,
-                    currencyId: payload.currencyId,
-                    receiptId: receiptId
-                },
-                where: {
-                    id: article.id ?? 0
-                },
-            })
+          return prisma.article.upsert({
+            create: {
+              amount: article.amount,
+              name: article.name,
+              unitPrice: article.unitPrice,
+              categoryId: article.category,
+              currencyId: payload.currencyId,
+              receiptId: receiptId,
+            },
+            update: {
+              amount: article.amount,
+              name: article.name,
+              unitPrice: article.unitPrice,
+              categoryId: article.category,
+              currencyId: payload.currencyId,
+              receiptId: receiptId,
+            },
+            where: {
+              id: article.id ?? 0,
+            },
+          });
         }),
       ]);
-      return res.json({message: "Action successfull"});
+      return res.json({ message: "Action successfull" });
     } catch (error) {
       console.log(error);
 

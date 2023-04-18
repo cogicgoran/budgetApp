@@ -14,21 +14,24 @@ import { IconEye } from "../components/icons/Eye";
 import Link from "next/link";
 import classNames from "classnames";
 import { ReceiptQueryResultItem } from "../server/repository/receipt";
-import { Modal } from "antd";
+import Backdrop from "../components/UI/backdrop/Backdrop";
+import ViewReceipt from "../components/modal/ViewReceipt";
+import { useAtom } from "jotai";
+import { viewReceiptAtom } from "../store/atoms";
+import Modal from "../components/UI/modal/Modal";
 
 function ViewReceiptsPage() {
   const [receipts, setReceipts] = useState<ReceiptQueryResultItem[]>([]);
-  const [modalReceiptId, setModalReceiptId] = useState<number>();
+  const [viewReceiptId, setViewReceiptId] = useAtom(viewReceiptAtom);
 
-  console.log(modalReceiptId);
 
-  function showReceipt(receiptId: number) {
-    setModalReceiptId(receiptId);
-  }
+  // function showReceipt(receiptId: number) {
+  //   setModalReceiptId(receiptId);
+  // }
 
-  function closeReceiptModal() {
-    setModalReceiptId(undefined);
-  }
+  // function closeReceiptModal() {
+  //   setModalReceiptId(undefined);
+  // }
 
   useEffect(() => {
     async function fetchReceipts() {
@@ -105,7 +108,10 @@ function ViewReceiptsPage() {
           return (
             <div className={classNames("flex justify-end items-center")}>
               <span
-                onClick={() => showReceipt(value.id)}
+                onClick={() => {
+                  console.log(value.id)
+                  setViewReceiptId(value.id)
+                }}
                 className={classNames(
                   "p-[6px]",
                   "transition-colors cursor-pointer rounded-[50%]",
@@ -190,11 +196,18 @@ function ViewReceiptsPage() {
           })}
         </tbody>
       </table>
-      {modalReceiptId !== undefined && (
-        <Modal open={true} onCancel={closeReceiptModal}>
-          {modalReceiptId}
-        </Modal>
-      )}
+      {viewReceiptId !== undefined && (
+          <Backdrop
+            onCancel={() => {
+              setViewReceiptId(undefined);
+            }}
+          />
+        )}
+        {viewReceiptId !== undefined && (
+          <Modal>
+            <ViewReceipt />
+          </Modal>
+        )}
     </div>
   );
 }

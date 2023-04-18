@@ -5,6 +5,7 @@ import ReceiptProduct from "./ReceiptProduct";
 import { FormDataArticle } from "./ReceiptAddProduct";
 import { useReceiptContext } from "../../../context/NewReceiptContext";
 import { useFormContext } from "react-hook-form";
+import classNames from "classnames";
 
 interface Props {
   onRemoveArticle: (id: string) => void;
@@ -29,7 +30,7 @@ function ReceiptProductList({ articleList, onRemoveArticle, total }: Props) {
 
   return (
     <div>
-      <table className={styles["new-receipt-table"]}>
+      <table className={classNames(styles["new-receipt-table"], "w-full")}>
         <thead>
           <tr>
             <th>{textProductName}</th>

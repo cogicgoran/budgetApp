@@ -10,8 +10,12 @@ import cn from "classnames";
 import { DashboardReceipt } from "../../../hooks/useRecentReceipts";
 import CategoryPill from "../../UI/category-pill/CategoryPill";
 import { getColorSchemeByMainColor } from "../../../utils/common";
+import { atom, useAtom } from "jotai";
+import { viewReceiptAtom } from "../../../store/atoms";
 
 export const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+
 
 export function formatCurrencyNumberText(price: number, code: string) {
   return Intl.NumberFormat("en-US", {
@@ -25,7 +29,9 @@ export function formatCurrencyNumberText(price: number, code: string) {
 }
 
 function Receipt(props: DashboardReceipt) {
+  const [_, setViewedReceiptId] = useAtom(viewReceiptAtom);
   const date = new Date(props.date);
+
   return (
     <article
       className={cn(
@@ -56,11 +62,13 @@ function Receipt(props: DashboardReceipt) {
         {formatCurrencyNumberText(props.price, props.currency)} {props.currency}
       </div>
       <div className={styles.dashboardReceiptActions}>
-        <Link href={PATHS.VIEW_RECEIPTS + "/" + props.id}>
-          <a>
+        <button onClick={() => {
+          setViewedReceiptId(props.id)
+        }}>
+          {/* <a> */}
             <IconEye />
-          </a>
-        </Link>
+          {/* </a> */}
+        </button>
         <Link href={PATHS.EDIT_RECEIPTS + "/" + props.id}>
           <a>
             <IconPenToSquare />

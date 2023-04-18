@@ -8,12 +8,20 @@ import { firebaseAuthService } from "../config/firebase/service";
 import styles from "../components/pages/dashboard/dashboard.module.scss";
 import DashboardCategories from "../components/pages/dashboard/DashboardCategories";
 import { useRecentReceipts } from "../hooks/useRecentReceipts";
+import { useAtom, useAtomValue } from "jotai";
+import { viewReceiptAtom } from "../store/atoms";
+import { useEffect, useState } from "react";
+import Backdrop from "../components/UI/backdrop/Backdrop";
+import Modal from "../components/UI/modal/Modal";
+import ViewReceipt from "../components/modal/ViewReceipt";
 
 const Home: NextPage = () => {
   const [user] = useAuthState(firebaseAuthService);
   const router = useRouter();
   const { receipts, categories, isLoading } = useRecentReceipts();
+  const [viewReceiptId, setViewReceiptId] = useAtom(viewReceiptAtom);
 
+  useEffect(() => {});
 
   return (
     <>
@@ -26,9 +34,23 @@ const Home: NextPage = () => {
         <RecentReceipts receipts={receipts} isLoading={isLoading} />
         <DashboardMonthly />
         <DashboardCategories categories={categories} isLoading={isLoading} />
+        {viewReceiptId !== undefined && (
+          <Backdrop
+            onCancel={() => {
+              setViewReceiptId(undefined);
+            }}
+          />
+        )}
+        {viewReceiptId !== undefined && (
+          <Modal>
+            <ViewReceipt />
+          </Modal>
+        )}
       </div>
     </>
   );
 };
 
 export default Home;
+
+

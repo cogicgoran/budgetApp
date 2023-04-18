@@ -82,7 +82,7 @@ const EditReceiptPage: NextPage = () => {
                     uuid: article.id,
                     price: article.unitPrice,
                     amount: article.amount,
-                    category: article.categoryId,
+                    category: article.category.id,
                     name: article.name,
                   };
                 }
