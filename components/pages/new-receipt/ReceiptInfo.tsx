@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { PATHS } from "../../../utils/constants";
-import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { useReceiptContext } from "../../../context/NewReceiptContext";
 import { IconCirclePlus } from "../../icons/CirclePlus";
 import { useFormContext } from "react-hook-form";
 import NewProductSelect from "../../forms/NewProductSelect";
@@ -12,7 +12,7 @@ import Datepicker from "react-datepicker";
 
 function ReceiptInfo() {
   const { t } = useTranslation();
-  const { marketplaces, currencies } = useNewReceiptContext();
+  const { marketplaces, currencies } = useReceiptContext();
   const textMarketplace = t("marketplace");
   const textDate = t("date");
   const textCurrency = t("currency");

@@ -2,9 +2,8 @@ import React from "react";
 import styles from "./receiptProductList.module.scss";
 import { useTranslation } from "react-i18next";
 import ReceiptProduct from "./ReceiptProduct";
-import { Article } from "@prisma/client";
 import { FormDataArticle } from "./ReceiptAddProduct";
-import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { useReceiptContext } from "../../../context/NewReceiptContext";
 import { useFormContext } from "react-hook-form";
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
 }
 
 function ReceiptProductList({ articleList, onRemoveArticle, total }: Props) {
-  const { currencies } = useNewReceiptContext();
+  const { currencies } = useReceiptContext();
   const { watch } = useFormContext();
   const selectedCurrencyId = watch("currency");
   const { t } = useTranslation();

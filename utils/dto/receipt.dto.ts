@@ -5,6 +5,7 @@ export const ReceiptDto = z.object({
   articles: z
     .array(
       z.object({
+        id: z.number({ invalid_type_error: "Invalid article id" }).optional(),
         name: z.string({ invalid_type_error: "Invalid article name" }),
         amount: z
           .number({ invalid_type_error: "Invalid article amount" })
@@ -12,14 +13,7 @@ export const ReceiptDto = z.object({
         unitPrice: z
           .number({ invalid_type_error: "Invalid article price" })
           .nonnegative("Invalid article price"),
-        category: z.object(
-          {
-            id: z
-              .number({ invalid_type_error: "Invalid article category" })
-              .int("Invalid article category"),
-          },
-          { invalid_type_error: "Invalid article category" }
-        ),
+        category: z.number({ invalid_type_error: "Invalid article category" }),
       }),
       { invalid_type_error: "Invalid receipt" }
     )

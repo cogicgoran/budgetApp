@@ -1,11 +1,18 @@
 import type { NextPage } from "next";
 import { useTranslation } from "react-i18next";
 import styles from "../components/pages/new-receipt/newReceipt.module.scss";
-import ReceiptForm from "../components/forms/ReceiptForm";
+import ReceiptForm, { createReceiptPayload } from "../components/forms/ReceiptForm";
 import { useMarketplaces } from "../hooks/useMarketplaces";
 import { useCategories } from "../hooks/useCategories";
 import { useCurrencies } from "../hooks/useCurrencies";
-import { NewReceiptContext } from "../context/NewReceiptContext";
+import { FormProvider, useForm } from "react-hook-form";
+import { FormDataArticle } from "../components/pages/new-receipt/ReceiptAddProduct";
+import { ReceiptContext } from "../context/NewReceiptContext";
+import { createReceipt } from "../utils/function/api/receipt";
+import { useRouter } from "next/router";
+import { PATHS } from "../utils/constants";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 export function isReceiptInfoValid(info: any) {
   const { marketplace, date, currency } = info;
@@ -23,28 +30,69 @@ export function isReceiptInfoValid(info: any) {
   return false;
 }
 
+const initialReceiptFormValue: ReceiptFormData = {
+  marketplace: null,
+  date: null,
+  currency: null,
+  articles: [],
+};
+
+export interface ReceiptFormData {
+  marketplace: number | null,
+  date: Date | null,
+  currency: number | null,
+  articles: Array<FormDataArticle>,
+}
+
 const NewReceiptPage: NextPage = () => {
   const { t } = useTranslation();
   const { categories } = useCategories();
   const { marketplaces } = useMarketplaces();
   const { currencies } = useCurrencies();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formMethods = useForm({
+    defaultValues: initialReceiptFormValue,
+  });
+  const router = useRouter()
+
   const textNewReceipt = t("newReceipt");
 
   const contextValue = {
     categories,
     marketplaces,
     currencies,
+  };
+
+  async function handleSubmit(formData: ReceiptFormData) {
+    setIsSubmitting(true);
+    try {
+      const payload = createReceiptPayload({
+        marketplace: formData.marketplace!,
+        date: new Date(formData.date!),
+        currency: formData.currency!,
+        articles: formData.articles,
+      });
+
+      await createReceipt(payload);
+      router.push(PATHS.DASHBOARD);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create new receipt.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
-    <NewReceiptContext.Provider
-      value={contextValue}
-    >
+    <ReceiptContext.Provider value={contextValue}>
       <div className={styles["new-receipt"]}>
         <h3>{textNewReceipt}</h3>
-        <ReceiptForm />
+        <FormProvider {...formMethods}>
+          <ReceiptForm submitHandler={handleSubmit} isSubmitting={isSubmitting} />
+        </FormProvider>
       </div>
-    </NewReceiptContext.Provider>
+    </ReceiptContext.Provider>
   );
 };
 

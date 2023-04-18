@@ -16,13 +16,13 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
                 amount: article.amount,
                 name: article.name,
                 unitPrice: article.unitPrice,
-                categoryId: Number(article.category.id),
-                currencyId: Number(payload.currencyId),
+                categoryId: article.category,
+                currencyId: payload.currencyId,
               })),
             },
           },
-          currency: { connect: { id: Number(payload.currencyId) } },
-          marketplace: { connect: { id: Number(payload.marketplaceId) } },
+          currency: { connect: { id: payload.currencyId } },
+          marketplace: { connect: { id: payload.marketplaceId } },
         },
       });
 

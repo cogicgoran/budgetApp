@@ -1,20 +1,20 @@
 import { Category, Currency, Marketplace } from "@prisma/client";
 import { createContext, useContext } from "react";
 
-interface INewReceiptContext {
+interface IReceiptContext {
   marketplaces: Marketplace[];
   categories: Category[];
   currencies: Currency[];
 }
 
-export const NewReceiptContext = createContext<INewReceiptContext>({
+export const ReceiptContext = createContext<IReceiptContext>({
   categories: [],
   currencies: [],
   marketplaces: [],
 });
 
-export function useNewReceiptContext() {
-  const context = useContext(NewReceiptContext);
+export function useReceiptContext() {
+  const context = useContext(ReceiptContext);
   if (context === undefined)
     throw new Error(
       "Use context hook must be used within according context provider."

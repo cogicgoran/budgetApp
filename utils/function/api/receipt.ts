@@ -39,4 +39,19 @@ export async function createReceipt(payload: any) {
   return response.data;
 }
 
+export async function updateReceipt(receiptId: number, payload: any) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/${receiptId}`;
+  const response = await axios.put(url, payload);
+  return response.data;
+}
+
+
+export async function getReceipt(id: number, abortController: AbortController) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/${id}`;
+  const response = await axios.get(url, {
+    signal: abortController.signal,
+  });
+  return response.data;
+}
+
 export type MonthlyReport = Awaited<ReturnType<typeof getMonthlyReport>>;

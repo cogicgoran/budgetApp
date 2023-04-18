@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./receiptAddProduct.module.scss";
 import classNames from "classnames";
-import { useNewReceiptContext } from "../../../context/NewReceiptContext";
+import { useReceiptContext } from "../../../context/NewReceiptContext";
 import { FormProvider, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,11 +44,12 @@ function getInitialFormValues() {
 export type AddArticleFormValues = ReturnType<typeof getInitialFormValues>;
 
 export interface FormDataArticle {
+  id?: number;
   uuid: string;
   name: string;
   price: number;
   amount: number;
-  category: { color: string; icon: string; id: number; name: string };
+  category: number;
 }
 
 function ReceiptAddProduct(props: Props) {
@@ -61,7 +62,7 @@ function ReceiptAddProduct(props: Props) {
     handleSubmit,
     setFocus,
   } = methods;
-  const { categories } = useNewReceiptContext();
+  const { categories } = useReceiptContext();
   const { t } = useTranslation();
   const textAdd = t("add");
   const textAddProduct = t("addProduct");
@@ -77,9 +78,7 @@ function ReceiptAddProduct(props: Props) {
     props.onAddArticle({
       uuid: uuidv4(),
       name: values.name.trim(),
-      category: categories.find(
-        (category) => category.id === Number(values.category!)
-      )!,
+      category: Number(values.category!),
       price: Number(values.price),
       amount: Number(values.amount),
     });
