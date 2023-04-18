@@ -1,7 +1,7 @@
 import { Receipt } from "@prisma/client";
 import { useEffect, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { getReceiptsView } from "../utils/function/api/receipt";
+import { deleteReceipt, getReceiptsView } from "../utils/function/api/receipt";
 import CategoryPill from "../components/UI/category-pill/CategoryPill";
 import {
   formatCurrencyNumberText,
@@ -19,11 +19,12 @@ import ViewReceipt from "../components/modal/ViewReceipt";
 import { useAtom } from "jotai";
 import { viewReceiptAtom } from "../store/atoms";
 import Modal from "../components/UI/modal/Modal";
+import { toast } from "react-toastify";
+import { getResponseErrorMessage } from "../utils/function/common";
 
 function ViewReceiptsPage() {
   const [receipts, setReceipts] = useState<ReceiptQueryResultItem[]>([]);
   const [viewReceiptId, setViewReceiptId] = useAtom(viewReceiptAtom);
-
 
   // function showReceipt(receiptId: number) {
   //   setModalReceiptId(receiptId);
@@ -109,8 +110,8 @@ function ViewReceiptsPage() {
             <div className={classNames("flex justify-end items-center")}>
               <span
                 onClick={() => {
-                  console.log(value.id)
-                  setViewReceiptId(value.id)
+                  console.log(value.id);
+                  setViewReceiptId(value.id);
                 }}
                 className={classNames(
                   "p-[6px]",
@@ -139,6 +140,18 @@ function ViewReceiptsPage() {
                   "transition-colors cursor-pointer rounded-[50%]",
                   "hover:bg-[#90c3d0] hover:text-[grey]"
                 )}
+                onClick={() => {
+                  (async function () {
+                    try {
+                      await deleteReceipt(value.id);
+                      handleDelete(value.id);
+                      toast.success("Receipt deleted");
+                    } catch (error) {
+                      console.log(error);
+                      toast.error(getResponseErrorMessage(error));
+                    }
+                  })();
+                }}
               >
                 <IconTrashCan className={classNames("w-[20px] h-[20px]")} />
               </span>
@@ -149,6 +162,12 @@ function ViewReceiptsPage() {
     ] as Column<ReceiptQueryResultItem>[];
   }, []);
   const data = useMemo(() => receipts, [receipts]);
+
+  function handleDelete(receiptId: number) {
+    setReceipts((prevReceipts) =>
+      prevReceipts.filter((receipt) => receipt.id !== receiptId)
+    );
+  }
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
@@ -197,17 +216,17 @@ function ViewReceiptsPage() {
         </tbody>
       </table>
       {viewReceiptId !== undefined && (
-          <Backdrop
-            onCancel={() => {
-              setViewReceiptId(undefined);
-            }}
-          />
-        )}
-        {viewReceiptId !== undefined && (
-          <Modal>
-            <ViewReceipt />
-          </Modal>
-        )}
+        <Backdrop
+          onCancel={() => {
+            setViewReceiptId(undefined);
+          }}
+        />
+      )}
+      {viewReceiptId !== undefined && (
+        <Modal>
+          <ViewReceipt onDelete={handleDelete} />
+        </Modal>
+      )}
     </div>
   );
 }

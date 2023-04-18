@@ -54,4 +54,10 @@ export async function getReceipt(id: number, abortController: AbortController) {
   return response.data;
 }
 
+export async function deleteReceipt(id: number) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/${id}`;
+  const response = await axios.delete(url);
+  return response.data;
+}
+
 export type MonthlyReport = Awaited<ReturnType<typeof getMonthlyReport>>;

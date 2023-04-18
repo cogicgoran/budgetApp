@@ -18,10 +18,9 @@ import ViewReceipt from "../components/modal/ViewReceipt";
 const Home: NextPage = () => {
   const [user] = useAuthState(firebaseAuthService);
   const router = useRouter();
-  const { receipts, categories, isLoading } = useRecentReceipts();
+  const { receipts, categories, isLoading, removeReceipt } =
+    useRecentReceipts();
   const [viewReceiptId, setViewReceiptId] = useAtom(viewReceiptAtom);
-
-  useEffect(() => {});
 
   return (
     <>
@@ -31,7 +30,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.dashboard}>
-        <RecentReceipts receipts={receipts} isLoading={isLoading} />
+        <RecentReceipts
+          receipts={receipts}
+          isLoading={isLoading}
+          onDelete={removeReceipt}
+        />
         <DashboardMonthly />
         <DashboardCategories categories={categories} isLoading={isLoading} />
         {viewReceiptId !== undefined && (
@@ -43,7 +46,7 @@ const Home: NextPage = () => {
         )}
         {viewReceiptId !== undefined && (
           <Modal>
-            <ViewReceipt />
+            <ViewReceipt onDelete={removeReceipt} />
           </Modal>
         )}
       </div>
@@ -52,5 +55,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-

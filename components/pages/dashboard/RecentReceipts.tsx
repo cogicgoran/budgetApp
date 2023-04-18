@@ -3,7 +3,10 @@ import Link from "next/link";
 import Receipt from "./Receipt";
 import { IconFileLines } from "../../icons/FileLines";
 import { useTranslation } from "react-i18next";
-import { DashboardReceipt, useRecentReceipts } from "../../../hooks/useRecentReceipts";
+import {
+  DashboardReceipt,
+  useRecentReceipts,
+} from "../../../hooks/useRecentReceipts";
 import { PATHS } from "../../../utils/constants";
 import styles from "./recentReceipts.module.scss";
 import Button from "../../UI/button/Button";
@@ -12,9 +15,10 @@ import { RecentReceipt } from "../../../server/service/receipt";
 interface Props {
   receipts: DashboardReceipt[];
   isLoading: boolean;
+  onDelete: (_receiptId: number) => void;
 }
 
-function RecentReceipts({ isLoading, receipts }: Props) {
+function RecentReceipts({ isLoading, receipts, onDelete }: Props) {
   const { t } = useTranslation();
   const textRecentReceipts = t("recentReceipts");
   const textSeeMore = t("seeMore");
@@ -29,7 +33,13 @@ function RecentReceipts({ isLoading, receipts }: Props) {
         {!isLoading &&
           receipts.length > 0 &&
           receipts.map((receipt) => {
-            return <Receipt key={receipt.id} {...receipt} />;
+            return (
+              <Receipt
+                onDelete={onDelete}
+                key={receipt.id}
+                {...receipt}
+              />
+            );
           })}
         {!isLoading && receipts.length === 0 && (
           <div className={styles.dashboardNoRecentResults}>

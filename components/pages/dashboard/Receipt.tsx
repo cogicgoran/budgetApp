@@ -12,6 +12,9 @@ import CategoryPill from "../../UI/category-pill/CategoryPill";
 import { getColorSchemeByMainColor } from "../../../utils/common";
 import { atom, useAtom } from "jotai";
 import { viewReceiptAtom } from "../../../store/atoms";
+import { deleteReceipt } from "../../../utils/function/api/receipt";
+import { toast } from "react-toastify";
+import { getResponseErrorMessage } from "../../../utils/function/common";
 
 export const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -28,7 +31,11 @@ export function formatCurrencyNumberText(price: number, code: string) {
     .trim();
 }
 
-function Receipt(props: DashboardReceipt) {
+interface Props extends DashboardReceipt {
+  onDelete: (_receiptId: number) => void;
+}
+
+function Receipt(props: Props) {
   const [_, setViewedReceiptId] = useAtom(viewReceiptAtom);
   const date = new Date(props.date);
 
@@ -74,7 +81,19 @@ function Receipt(props: DashboardReceipt) {
             <IconPenToSquare />
           </a>
         </Link>
-        <span>
+        <span onClick={() => {
+          (async function () {
+            try {
+              await deleteReceipt(props.id);
+              // onDelete(receipt.id);
+              props.onDelete(props.id)
+              toast.success("Receipt deleted");
+            } catch (error) {
+              console.log(error);
+              toast.error(getResponseErrorMessage(error));
+            }
+          })();
+        }}>
           <IconTrashCan />
         </span>
       </div>

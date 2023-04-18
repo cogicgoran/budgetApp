@@ -105,6 +105,32 @@ const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       return res.status(500).json({ message: "Internal server error" });
     }
+  } else if (req.method === "DELETE") {
+    const receiptId = Number(req.query.id);
+    try {
+      if (isNaN(receiptId)) {
+        // throw exception
+      }
+
+      await prisma.$transaction([
+        prisma.article.deleteMany({
+          where: {
+            receiptId: {
+              equals: receiptId,
+            },
+          },
+        }),
+        prisma.receipt.delete({
+          where: {
+            id: receiptId,
+          },
+        }),
+      ]);
+      return res.json({ message: "Action successfull" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
   } else {
     res.statusCode = 405;
     return res.send("Method not allowed.");
