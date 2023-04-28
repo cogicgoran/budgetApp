@@ -5,7 +5,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import DashboardMonthly from "../components/pages/dashboard/DashboardMonthly";
 import RecentReceipts from "../components/pages/dashboard/RecentReceipts";
 import { firebaseAuthService } from "../config/firebase/service";
-import styles from "../components/pages/dashboard/dashboard.module.scss";
 import DashboardCategories from "../components/pages/dashboard/DashboardCategories";
 import { useRecentReceipts } from "../hooks/useRecentReceipts";
 import { useAtom, useAtomValue } from "jotai";
@@ -29,7 +28,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Budget app dashboard page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.dashboard}>
+      <div>
         <RecentReceipts
           receipts={receipts}
           isLoading={isLoading}

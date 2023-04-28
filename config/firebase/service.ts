@@ -1,19 +1,31 @@
-import { initializeApp } from "firebase/app"
-import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
+import { FirebaseOptions, initializeApp } from "firebase/app"
+import { getAuth, createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider,connectAuthEmulator } from 'firebase/auth';
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+const firebaseConfig:FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const firebaseAuthService = getAuth(app);
+
+function getAuthService(){
+  if(process.env.NODE_ENV === "development"){
+    const auth = getAuth();
+    connectAuthEmulator(auth, "http://localhost:9099",{
+      disableWarnings: true
+    });
+    return auth;
+  }
+  return getAuth(app);
+}
+
+export const firebaseAuthService = getAuthService();
 
 export async function signUp(email: string, password: string) {
   return createUserWithEmailAndPassword(firebaseAuthService, email, password);
