@@ -16,11 +16,18 @@ import "react-tooltip/dist/react-tooltip.css";
 import "react-datepicker/dist/react-datepicker.css";
 import PageLoader from "../components/UI/loader/full-page-loader/PageLoader";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
   const [isAppInitialized, setisAppInitialized] = useState(false);
   const [showApp, setShowApp] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!showApp) return;
+    if (!user) router.push("/auth");
+  }, [user]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,7 +35,10 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
     }, 1000);
   }, []);
 
-  function handleLoaderHiding(){
+  async function handleLoaderHiding() {
+    if (!user) {
+      await router.push("/auth");
+    }
     setShowApp(true);
   }
 
@@ -44,14 +54,17 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToastContainer position="bottom-right" autoClose={3000} />
-      <PageLoader showLoader={!isAppInitialized || loading} onLoaderHidden={handleLoaderHiding} />
-      {showApp &&
+      <PageLoader
+        showLoader={!isAppInitialized || loading}
+        onLoaderHidden={handleLoaderHiding}
+      />
+      {showApp && (
         <AppLayout>
           <Language />
           <Header />
           <Component {...pageProps} />
         </AppLayout>
-      }
+      )}
     </>
   );
 };
