@@ -15,7 +15,7 @@ const firebaseConfig:FirebaseOptions = {
 const app = initializeApp(firebaseConfig);
 
 function getAuthService(){
-  if(process.env.NODE_ENV === "development"){
+  if(process.env.NEXT_PUBLIC_FIREBASE_USE_EMULATORS === "on"){
     const auth = getAuth();
     connectAuthEmulator(auth, "http://localhost:9099",{
       disableWarnings: true
@@ -47,5 +47,4 @@ export async function logOut() {
   return signOut(firebaseAuthService);
 }
 
-// export const auth = app.auth();
 export default app;

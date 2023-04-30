@@ -13,7 +13,7 @@ function PageLoader({ showLoader, onLoaderHidden }: Props) {
 
   useEffect(() => {
     if (!showLoader) {
-      pageLoaderInnerElement.current?.classList.add("opacity-0");
+      pageLoaderElement.current?.classList.add("opacity-0");
       setTimeout(() => {
         pageLoaderElement.current?.classList.add("hidden");
         onLoaderHidden();
@@ -25,14 +25,15 @@ function PageLoader({ showLoader, onLoaderHidden }: Props) {
     <div
       ref={pageLoaderElement}
       className={classNames(
-        "flex justify-center items-center w-[100vw] h-[100vh] bg-[#e0f9ff]"
+        "flex justify-center items-center w-[100vw] h-[100vh] bg-[#e0f9ff]",
+        "absolute z-10",
+        "transition-opacity duration-500 ease-out"
       )}
     >
       <div
         ref={pageLoaderInnerElement}
         className={classNames(
-          "flex justify-center items-center flex-col gap-4",
-          "transition-opacity duration-500 ease-out"
+          "flex justify-center items-center flex-col gap-4"
         )}
       >
         Initializing app

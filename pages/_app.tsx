@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 
 const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
-  const [isAppInitialized, setisAppInitialized] = useState(false);
+  const [isAppInitialized, setIsAppInitialized] = useState(false);
   const [showApp, setShowApp] = useState(false);
   const router = useRouter();
 
@@ -31,8 +31,8 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setisAppInitialized(true);
-    }, 1000);
+      setIsAppInitialized(true);
+    }, 1250);
   }, []);
 
   async function handleLoaderHiding() {
@@ -54,17 +54,17 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToastContainer position="bottom-right" autoClose={3000} />
-      <PageLoader
-        showLoader={!isAppInitialized || loading}
-        onLoaderHidden={handleLoaderHiding}
-      />
-      {showApp && (
-        <AppLayout>
-          <Language />
-          <Header />
-          <Component {...pageProps} />
-        </AppLayout>
+      {!showApp && (
+        <PageLoader
+          showLoader={!isAppInitialized || loading}
+          onLoaderHidden={handleLoaderHiding}
+        />
       )}
+      <AppLayout>
+        <Language />
+        <Header />
+        <Component {...pageProps} />
+      </AppLayout>
     </>
   );
 };
