@@ -15,6 +15,7 @@ import { ReceiptDto } from "../../utils/dto/receipt.dto";
 import Button from "../UI/button/Button";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { ReceiptFormData } from "../../pages/new-receipt";
+import { Dayjs } from "dayjs";
 
 interface Props {
   isSubmitting: boolean;
@@ -96,17 +97,17 @@ function ReceiptForm({ isSubmitting, submitHandler }: Props) {
 
 export default ReceiptForm;
 
-export function createReceiptPayload(data: {
+export function createReceiptPayload(formData: {
   marketplace: number;
-  date: Date;
+  date: Dayjs;
   currency: number;
   articles: FormDataArticle[];
 }) {
   return ReceiptDto.parse({
-    marketplaceId: Number(data.marketplace),
-    date: data.date.toISOString(),
-    currencyId: Number(data.currency),
-    articles: data.articles.map((article) => ({
+    marketplaceId: Number(formData.marketplace),
+    date: formData.date.toISOString(),
+    currencyId: Number(formData.currency),
+    articles: formData.articles.map((article) => ({
       id: article.id,
       name: article.name,
       category: article.category,

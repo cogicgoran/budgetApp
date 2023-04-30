@@ -13,10 +13,11 @@ import Language from "../components/language/Language";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-tooltip/dist/react-tooltip.css";
-import "react-datepicker/dist/react-datepicker.css";
 import PageLoader from "../components/UI/loader/full-page-loader/PageLoader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
@@ -53,18 +54,20 @@ const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
         <meta name="description" content="Budget App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ToastContainer position="bottom-right" autoClose={3000} />
-      {!showApp && (
-        <PageLoader
-          showLoader={!isAppInitialized || loading}
-          onLoaderHidden={handleLoaderHiding}
-        />
-      )}
-      <AppLayout>
-        <Language />
-        <Header />
-        <Component {...pageProps} />
-      </AppLayout>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ToastContainer position="bottom-right" autoClose={3000} />
+        {!showApp && (
+          <PageLoader
+            showLoader={!isAppInitialized || loading}
+            onLoaderHidden={handleLoaderHiding}
+          />
+        )}
+        <AppLayout>
+          <Language />
+          <Header />
+          <Component {...pageProps} />
+        </AppLayout>
+      </LocalizationProvider>
     </>
   );
 };

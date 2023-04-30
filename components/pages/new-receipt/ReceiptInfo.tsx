@@ -8,7 +8,8 @@ import { useFormContext } from "react-hook-form";
 import NewProductSelect from "../../forms/NewProductSelect";
 import classNames from "classnames";
 import SelectCustom from "../../forms/SelectCustom";
-import Datepicker from "react-datepicker";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 function ReceiptInfo() {
   const { t } = useTranslation();
@@ -44,14 +45,12 @@ function ReceiptInfo() {
       </div>
       <div className={classNames("flex items-center gap-1", "mb-1")}>
         <label htmlFor="date">{textDate}:</label>
-        <Datepicker
-          selected={date}
-          showTimeInput
-          onChange={(date) => {
-            formMethods.setValue("date", date);
+        <DateTimePicker
+          value={date}
+          onChange={(value) => {
+            formMethods.setValue("date", value);
           }}
-          dateFormat="MMM dd,yyyy HH:mm"
-          timeFormat="p"
+          format="MMM DD, YYYY HH:mm"
         />
       </div>
       <div className={classNames("flex items-center gap-1", "mb-1")}>

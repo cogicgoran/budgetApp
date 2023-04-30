@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { getResponseErrorMessage } from "../../utils/function/common";
 import { ReceiptFormData } from "../new-receipt";
 import { PATHS } from "../../utils/constants";
+import dayjs from "dayjs";
 
 export function isReceiptInfoValid(info: any) {
   const { marketplace, date, currency } = info;
@@ -61,6 +62,7 @@ const EditReceiptPage: NextPage = () => {
   };
 
   useEffect(() => {
+    if(!router.isReady) return
     if (isNaN(receiptId)) {
       //  handle error
       return;
@@ -74,7 +76,7 @@ const EditReceiptPage: NextPage = () => {
         if (data.receipt) {
           formMethods.reset(
             {
-              date: new Date(data.receipt.date),
+              date: dayjs(data.receipt.date),
               articles: data.receipt.articles.map(
                 (article: any): FormDataArticle => {
                   return {
@@ -101,14 +103,14 @@ const EditReceiptPage: NextPage = () => {
     return () => {
       abortController.abort();
     };
-  }, []);
+  }, [router.isReady]);
 
   async function handleSubmit(formData: ReceiptFormData) {
     setIsSubmitting(true);
     try {
       const payload = createReceiptPayload({
         marketplace: formData.marketplace!,
-        date: new Date(formData.date!),
+        date: formData.date!,
         currency: formData.currency!,
         articles: formData.articles,
       });

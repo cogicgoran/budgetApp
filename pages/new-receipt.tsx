@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { PATHS } from "../utils/constants";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 
 export function isReceiptInfoValid(info: any) {
   const { marketplace, date, currency } = info;
@@ -39,7 +40,7 @@ const initialReceiptFormValue: ReceiptFormData = {
 
 export interface ReceiptFormData {
   marketplace: number | null,
-  date: Date | null,
+  date: Dayjs | null,
   currency: number | null,
   articles: Array<FormDataArticle>,
 }
@@ -66,13 +67,15 @@ const NewReceiptPage: NextPage = () => {
 
   async function handleSubmit(formData: ReceiptFormData) {
     setIsSubmitting(true);
+    console.log('halo')
     try {
       const payload = createReceiptPayload({
         marketplace: formData.marketplace!,
-        date: new Date(formData.date!),
+        date: formData.date!,
         currency: formData.currency!,
         articles: formData.articles,
       });
+      console.log('haro')
 
       await createReceipt(payload);
       router.push(PATHS.DASHBOARD);
