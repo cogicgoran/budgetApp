@@ -90,7 +90,7 @@ const NewReceiptPage: NextPage = () => {
   return (
     <ReceiptContext.Provider value={contextValue}>
       <div className={styles["new-receipt"]}>
-        <h3>{textNewReceipt}</h3>
+        <h3 className="text-center text-[18px] font-normal">{textNewReceipt}</h3>
         <FormProvider {...formMethods}>
           <ReceiptForm submitHandler={handleSubmit} isSubmitting={isSubmitting} />
         </FormProvider>

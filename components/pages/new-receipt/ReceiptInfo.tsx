@@ -8,8 +8,16 @@ import { useFormContext } from "react-hook-form";
 import NewProductSelect from "../../forms/NewProductSelect";
 import classNames from "classnames";
 import SelectCustom from "../../forms/SelectCustom";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker, pickersLayoutClasses } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import {
+  buttonBaseClasses,
+  formControlClasses,
+  iconClasses,
+  inputAdornmentClasses,
+  inputBaseClasses,
+  outlinedInputClasses,
+} from "@mui/material";
 
 function ReceiptInfo() {
   const { t } = useTranslation();
@@ -46,11 +54,53 @@ function ReceiptInfo() {
       <div className={classNames("flex items-center gap-1", "mb-1")}>
         <label htmlFor="date">{textDate}:</label>
         <DateTimePicker
+          format="MMM DD, YYYY HH:mm"
           value={date}
           onChange={(value) => {
             formMethods.setValue("date", value);
           }}
-          format="MMM DD, YYYY HH:mm"
+          sx={{
+            backgroundColor: "white",
+            [`.${inputBaseClasses.input}`]: {
+              padding: "3px",
+              color: "#1a4e5b",
+              width: "256px",
+              ["::placeholder"]: {
+                color: "#90c3d0",
+                opacity: 1,
+              },
+            },
+            [`.${inputAdornmentClasses.root}`]: {
+              marginLeft: "unset",
+              height: "unset",
+            },
+            [`.${inputBaseClasses.adornedEnd}`]: {
+              fontSize: "20px",
+              fontWeight: "normal",
+              fontFamily: "unset",
+              borderRadius: "unset",
+              backgroundColor: "unset",
+              paddingRight: "unset",
+              [`.${buttonBaseClasses.root}`]: {
+                color: "#1a4e5b",
+                opacity: "0.8",
+                margin: "2px",
+                padding: "4px",
+                " svg": {
+                  width: "20px",
+                  height: "20px",
+                },
+                ":hover": {
+                  color: "#1a4e5b",
+                  backgroundColor: "#90c3d0",
+                  opacity: "1",
+                },
+              },
+              [`.${outlinedInputClasses.notchedOutline}`]: {
+                borderColor: "#90c3d0",
+              },
+            },
+          }}
         />
       </div>
       <div className={classNames("flex items-center gap-1", "mb-1")}>

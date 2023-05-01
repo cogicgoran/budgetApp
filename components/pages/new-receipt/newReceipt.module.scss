@@ -4,21 +4,15 @@
   color: #1a4e5b;
 }
 
-.new-receipt h3 {
-  text-align: center;
-  font-size: 18px;
-  font-weight: normal;
-}
+// .new-receipt input::placeholder {
+//   font-style: italic;
+//   color: #90c3d0;
+// }
 
-.new-receipt input::placeholder {
-  font-style: italic;
-  color: #90c3d0;
-}
-
-.new-receipt input,
-.new-receipt select {
-  border: 1px solid #90c3d0;
-}
+// .new-receipt input,
+// .new-receipt select {
+//   border: 1px solid #90c3d0;
+// }
 
 .new-receipt__add-product {
   margin-top: 1em;
