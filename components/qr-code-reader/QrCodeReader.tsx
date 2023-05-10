@@ -21,7 +21,16 @@ const createConfig = (props: any): Html5QrcodeScannerConfig => {
   return config;
 };
 
-function QrCodeReader(props: any) {
+interface Props {
+  fps: number;
+  qrbox: number;
+  disableFlip: boolean;
+  qrCodeSuccessCallback: (decodedText: string) => void;
+  qrCodeErrorCallback?: () => void;
+  verbose? : boolean;
+}
+
+function QrCodeReader(props: Props) {
   useEffect(() => {
     // when component mounts
     const config = createConfig(props);
