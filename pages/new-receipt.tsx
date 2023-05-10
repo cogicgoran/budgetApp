@@ -67,7 +67,6 @@ const NewReceiptPage: NextPage = () => {
 
   async function handleSubmit(formData: ReceiptFormData) {
     setIsSubmitting(true);
-    console.log('halo')
     try {
       const payload = createReceiptPayload({
         marketplace: formData.marketplace!,
@@ -75,7 +74,6 @@ const NewReceiptPage: NextPage = () => {
         currency: formData.currency!,
         articles: formData.articles,
       });
-      console.log('haro')
 
       await createReceipt(payload);
       router.push(PATHS.DASHBOARD);

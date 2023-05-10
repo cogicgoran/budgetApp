@@ -16,6 +16,8 @@ import Button from "../UI/button/Button";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { ReceiptFormData } from "../../pages/new-receipt";
 import { Dayjs } from "dayjs";
+import PrepopulateReceiptForm from "./prepopulate/PrepopulateReceiptForm";
+import { uuidv4 } from "@firebase/util";
 
 interface Props {
   isSubmitting: boolean;
@@ -24,6 +26,7 @@ interface Props {
 
 function ReceiptForm({ isSubmitting, submitHandler }: Props) {
   const [showModal, setShowModal] = useState(false);
+  const [showPrepopulate, setShowPrepopulate] = useState(false);
   const { t } = useTranslation();
 
   const addProductRef = useRef<HTMLButtonElement>(null);
@@ -55,43 +58,74 @@ function ReceiptForm({ isSubmitting, submitHandler }: Props) {
     );
   }
 
+  function handleDataPopulation(data:unknown[]){
+    formMethods.setValue("articles", data.map((dataItem) => {
+      return {
+        amount:dataItem.amount,
+        category: 1,
+        name:dataItem.name,
+        price:dataItem.total,
+        uuid:uuidv4()
+      }
+    }));
+  }
+
   return (
-    <div>
-      <form onSubmit={formMethods.handleSubmit(submitHandler)}>
-        <ReceiptInfo />
-        <ReceiptProductList
-          onRemoveArticle={removeArticle}
-          articleList={formMethods.getValues().articles}
-          total={totalPrice}
-        />
-        {showModal &&
-          createPortal(
-            <Backdrop onCancel={() => setShowModal(false)} />,
-            document.getElementById("backdrop-root")!
-          )}
-        {showModal &&
-          createPortal(
-            <ReceiptAddProduct
-              onAddArticle={addArticleHandler}
-              onCancel={() => setShowModal(false)}
-            />,
-            document.getElementById("overlay-root")!
-          )}
-        <Button
-          ref={addProductRef}
-          type="button"
-          actionType="create"
-          onClick={() => setShowModal(true)}
-        >
-          + {textAddProduct}
-        </Button>
-        <div className="text-center">
-          <Button type="submit" actionType="success" disabled={isSubmitting}>
-            {textFinish}
+    <>
+      <div>
+        <form onSubmit={formMethods.handleSubmit(submitHandler)}>
+          <ReceiptInfo />
+          <ReceiptProductList
+            onRemoveArticle={removeArticle}
+            articleList={formMethods.getValues().articles}
+            total={totalPrice}
+          />
+          <Button
+            ref={addProductRef}
+            type="button"
+            actionType="create"
+            onClick={() => setShowModal(true)}
+          >
+            + {textAddProduct}
           </Button>
-        </div>
-      </form>
-    </div>
+          <Button
+            type="button"
+            actionType="create"
+            onClick={() => setShowPrepopulate(true)}
+          >
+            + Scan receipt QR Code
+          </Button>
+          <div className="text-center">
+            <Button type="submit" actionType="success" disabled={isSubmitting}>
+              {textFinish}
+            </Button>
+          </div>
+        </form>
+      </div>
+      {showModal &&
+        createPortal(
+          <Backdrop onCancel={() => setShowModal(false)} />,
+          document.getElementById("backdrop-root")!
+        )}
+      {showModal &&
+        createPortal(
+          <ReceiptAddProduct
+            onAddArticle={addArticleHandler}
+            onCancel={() => setShowModal(false)}
+          />,
+          document.getElementById("overlay-root")!
+        )}
+      {showPrepopulate &&
+        createPortal(
+          <Backdrop onCancel={() => setShowPrepopulate(false)} />,
+          document.getElementById("backdrop-root")!
+        )}
+      {showPrepopulate &&
+        createPortal(
+          <PrepopulateReceiptForm onDataRetrieved={handleDataPopulation} />,
+          document.getElementById("overlay-root")!
+        )}
+    </>
   );
 }
 

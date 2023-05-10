@@ -17,9 +17,7 @@ import PageLoader from "../components/UI/loader/full-page-loader/PageLoader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const HomePage: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [user, loading, error] = useAuthState(firebaseAuthService);
