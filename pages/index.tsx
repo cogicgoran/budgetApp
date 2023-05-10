@@ -14,8 +14,7 @@ const Home: NextPage = () => {
     } else {
       router.push("/dashboard");
     }
-  })
-
+  }, [user]);
 
   return null;
 };
