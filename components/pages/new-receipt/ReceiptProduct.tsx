@@ -3,6 +3,10 @@ import { IconTrashCan } from "../../icons/TrashCan";
 import { FormDataArticle } from "./ReceiptAddProduct";
 import classNames from "classnames";
 import { useReceiptContext } from "../../../context/NewReceiptContext";
+import SelectCustom from "../../forms/SelectCustom";
+import Select from "react-select";
+import { useFormContext } from "react-hook-form";
+import { ReceiptFormData } from "../../../pages/new-receipt";
 
 interface Props {
   onRemoveArticle: Function;
@@ -10,25 +14,77 @@ interface Props {
   currency: string | undefined;
 }
 
-function ReceiptProduct({
-  article,
-  onRemoveArticle,
-  currency,
-}: Props) {
+function ReceiptProduct({ article, onRemoveArticle, currency }: Props) {
   const { categories } = useReceiptContext();
   const category = categories.find(
     (category) => category.id === article.category
   )!;
-
+  const formMethods = useFormContext<ReceiptFormData>();
   function removeHandler() {
     onRemoveArticle(article.uuid);
   }
+
+  const options = categories.map((category) => ({
+    label: category.name,
+    value: category.id.toString(),
+  }));
+
+  const articles = formMethods.watch("articles");
+  const thisArticle = articles.find((art) => art.uuid === article.uuid);
+  const selectedOption = options.find(
+    (opt) => parseInt(opt.value) === thisArticle?.category
+  )!;
+
+  const articleIdx = articles.indexOf(thisArticle!);
 
   return (
     <tr>
       <td className={classNames("px-[3px] py-[1px]")}>{article.name}</td>
       <td className={classNames("px-[3px] py-[1px]")}>
         <span>{category?.name}</span>
+        <Select
+          options={options}
+          onChange={(option) => {
+            formMethods.setValue(`articles.${articleIdx}.category`, Number(option?.value));
+          }}
+          value={selectedOption}
+          components={{
+            IndicatorSeparator: () => null,
+          }}
+          styles={{
+            control(base) {
+              return {
+                ...base,
+                minHeight: "unset",
+                borderRadius: "unset",
+                // borderColor: errors[name] ? "f00" : "#90c3d0",
+              };
+            },
+            valueContainer(base) {
+              return { ...base, padding: "0" };
+            },
+            input(base) {
+              return { ...base, margin: "0" };
+            },
+            dropdownIndicator(base) {
+              return { ...base, padding: "0" };
+            },
+            placeholder(base) {
+              return { ...base, fontStyle: "italic", color: "#90c3d0" };
+            },
+            option(base) {
+              return { ...base, color: "#1a4e5b" };
+            },
+            singleValue(base) {
+              return { ...base, color: "#1a4e5b" };
+            },
+          }}
+          classNames={{
+            control() {
+              return "border-[#ff0000] min-w-[256px]";
+            },
+          }}
+        />
       </td>
       <td className={classNames("px-[3px] py-[1px]")}>
         {article.price.toFixed(2)} {currency}

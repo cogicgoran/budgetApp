@@ -60,4 +60,10 @@ export async function deleteReceipt(id: number) {
   return response.data;
 }
 
+export async function populateScanResults(query:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/receipt/populate?query=${query}`;
+  const response = await axios.get(url);
+  return response.data;
+}
+
 export type MonthlyReport = Awaited<ReturnType<typeof getMonthlyReport>>;
