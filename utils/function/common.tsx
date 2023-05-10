@@ -69,7 +69,7 @@ export type APIErrorResponse = AxiosError<{
 }>;
 
 export function getResponseErrorMessage(error: unknown) {
-  const axiosErrorMessage = (error as APIErrorResponse).response?.data.message;
+  const axiosErrorMessage = (error as APIErrorResponse).response?.data;
   if (axiosErrorMessage) return axiosErrorMessage;
   return (error as any).message;
 }

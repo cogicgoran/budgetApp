@@ -3,17 +3,20 @@ import axios from "axios";
 
 const whitelistedReceiptVerifierUrls = ["https://suf.purs.gov.rs/v/?vl="];
 
-function matchWhitelistedReceiptVerifier(input: string){
-  return whitelistedReceiptVerifierUrls.some((verifiedUrl) => {
-    return verifiedUrl.startsWith(input)
-  })
+function matchWhitelistedReceiptVerifier(input: string) {
+  return whitelistedReceiptVerifierUrls.some((verifiedUrl) =>
+    input.startsWith(verifiedUrl)
+  );
 }
 
 const routeHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     try {
-      if(!req.query.query || matchWhitelistedReceiptVerifier(req.query.query as string)) {
-        throw new Error("URL not supported.");
+      if (
+        !req.query.query ||
+        !matchWhitelistedReceiptVerifier(req.query.query as string)
+      ) {
+        return res.status(400).send("URL not supported.");
       }
       const response = await axios.get(req.query.query as string);
       const pageContent = response.data;
