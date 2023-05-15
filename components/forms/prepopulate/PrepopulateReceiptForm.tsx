@@ -7,23 +7,38 @@ import { populateScanResults } from "../../../utils/function/api/receipt";
 import { toast } from "react-toastify";
 import { getResponseErrorMessage } from "../../../utils/function/common";
 
-interface Props {
-  onDataRetrieved: (data: any) => void;
+export type ISODateString = string;
+
+export interface PrepopulateReceiptResponse {
+  articles: any[];
+  date: ISODateString;
+  marketplaceData: {
+    shopUniqueId: string;
+    shopName: string;
+    address: string;
+    city: string;
+  };
 }
 
-function PrepopulateReceiptForm({onDataRetrieved}:Props) {
+interface Props {
+  onDataRetrieved: (data: PrepopulateReceiptResponse) => void;
+}
+
+function PrepopulateReceiptForm({ onDataRetrieved }: Props) {
   const isRetrievingData = useRef(false);
 
   function onNewScanResult(decodedText: string) {
-    if(isRetrievingData.current) return;
+    if (isRetrievingData.current) return;
     isRetrievingData.current = true;
     fetchReceiptData(decodedText);
   }
 
-  async function fetchReceiptData(url: string){
+  async function fetchReceiptData(url: string) {
     try {
-        const receiptData = await populateScanResults(url);
-        onDataRetrieved(receiptData.data);
+      const receiptData: PrepopulateReceiptResponse = await populateScanResults(
+        url
+      );
+      onDataRetrieved(receiptData);
     } catch (error) {
       toast.error(getResponseErrorMessage(error));
     }
@@ -33,10 +48,11 @@ function PrepopulateReceiptForm({onDataRetrieved}:Props) {
     <div className={styles.prepopulateReceiptModal}>
       <h1 className="text-center mb-2">Scan your receipt</h1>
       <QrCodeReader
-        fps={10}
-        qrbox={360}
+        fps={4}
+        qrbox={420}
         disableFlip={false}
         qrCodeSuccessCallback={onNewScanResult}
+        qrCodeErrorCallback={(err) => console.log(err)}
       />
     </div>
   );

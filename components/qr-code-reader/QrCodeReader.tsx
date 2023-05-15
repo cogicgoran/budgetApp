@@ -1,4 +1,4 @@
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { Html5QrcodeScannerConfig } from "html5-qrcode/esm/html5-qrcode-scanner";
 import React, { useEffect } from "react";
 
@@ -6,6 +6,7 @@ const qrcodeRegionId = "html5qr-code-full-region";
 
 const createConfig = (props: any): Html5QrcodeScannerConfig => {
   let config = {} as Html5QrcodeScannerConfig;
+  config.formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
   if (props.fps) {
     config.fps = props.fps;
   }
@@ -26,8 +27,8 @@ interface Props {
   qrbox: number;
   disableFlip: boolean;
   qrCodeSuccessCallback: (decodedText: string) => void;
-  qrCodeErrorCallback?: () => void;
-  verbose? : boolean;
+  qrCodeErrorCallback?: (err: any) => void;
+  verbose?: boolean;
 }
 
 function QrCodeReader(props: Props) {

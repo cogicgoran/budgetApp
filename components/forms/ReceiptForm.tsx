@@ -16,8 +16,12 @@ import Button from "../UI/button/Button";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { ReceiptFormData } from "../../pages/new-receipt";
 import { Dayjs } from "dayjs";
-import PrepopulateReceiptForm from "./prepopulate/PrepopulateReceiptForm";
+import PrepopulateReceiptForm, {
+  PrepopulateReceiptResponse,
+} from "./prepopulate/PrepopulateReceiptForm";
 import { uuidv4 } from "@firebase/util";
+import { useReceiptContext } from "../../context/NewReceiptContext";
+import dayjs from "dayjs";
 
 interface Props {
   isSubmitting: boolean;
@@ -28,6 +32,7 @@ function ReceiptForm({ isSubmitting, submitHandler }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [showPrepopulate, setShowPrepopulate] = useState(false);
   const { t } = useTranslation();
+  const { marketplaces } = useReceiptContext();
 
   const addProductRef = useRef<HTMLButtonElement>(null);
   const formMethods = useFormContext<ReceiptFormData>();
@@ -58,16 +63,46 @@ function ReceiptForm({ isSubmitting, submitHandler }: Props) {
     );
   }
 
-  function handleDataPopulation(data:unknown[]){
-    formMethods.setValue("articles", data.map((dataItem) => {
-      return {
-        amount:dataItem.amount,
-        category: 1,
-        name:dataItem.name,
-        price:dataItem.total,
-        uuid:uuidv4()
-      }
-    }));
+  function getMarketplaceByOption(
+    marketplaceName: string,
+    marketplaceAddress: string
+  ) {
+    const foundMarketplace = marketplaces.find((marketplace) => {
+      return (
+        marketplace.name
+          .toLowerCase()
+          .includes(marketplaceName.toLowerCase()) &&
+        marketplace.address
+          .toLowerCase()
+          .includes(marketplaceAddress.toLowerCase())
+      );
+    });
+
+    return foundMarketplace?.id ?? null;
+  }
+
+  function handleDataPopulation(data: PrepopulateReceiptResponse) {
+    console.log(data);
+    formMethods.setValue(
+      "articles",
+      data.articles.map((dataItem) => {
+        return {
+          amount: dataItem.amount,
+          category: 1,
+          name: dataItem.name,
+          price: dataItem.unitPrice,
+          uuid: uuidv4(),
+        };
+      })
+    );
+    formMethods.setValue("date", dayjs(data.date));
+    formMethods.setValue(
+      "marketplace",
+      getMarketplaceByOption(
+        data.marketplaceData.shopName,
+        data.marketplaceData.address
+      )
+    );
   }
 
   return (
